@@ -19,6 +19,9 @@
     <Filter Include="Source Files\Entity">
       <UniqueIdentifier>{f9e6d77f-b0ae-4481-9c4d-e1e49bdefe7f}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\Script">
+      <UniqueIdentifier>{2abdf682-a0a1-45ca-a45e-19a244d136fe}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -39,6 +42,9 @@
     <ClCompile Include="Resource.cpp">
       <Filter>Source Files\Entity</Filter>
     </ClCompile>
+    <ClCompile Include="Script.cpp">
+      <Filter>Source Files\Script</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="RenderWorld.h">
@@ -55,6 +61,9 @@
     </ClInclude>
     <ClInclude Include="Resource.h">
       <Filter>Source Files\Entity</Filter>
+    </ClInclude>
+    <ClInclude Include="Script.h">
+      <Filter>Source Files\Script</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

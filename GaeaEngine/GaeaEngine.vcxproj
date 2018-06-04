@@ -70,8 +70,8 @@
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
-    <LibraryPath>C:\Program Files (x86)\Microsoft DirectX SDK (June 2010)\Lib\x86;..\Thirdparty\SDL2\Lib\x86\Debug;$(LibraryPath)</LibraryPath>
-    <IncludePath>C:\Program Files (x86)\Microsoft DirectX SDK (June 2010)\Include;..\Thirdparty\SDL2\Include;$(IncludePath)</IncludePath>
+    <LibraryPath>C:\Program Files (x86)\Microsoft DirectX SDK (June 2010)\Lib\x86;..\Thirdparty\SDL2\Lib\x86\Debug;E:\Garage\GaeaEngine\Thirdparty\Lua\lib;$(LibraryPath)</LibraryPath>
+    <IncludePath>C:\Program Files (x86)\Microsoft DirectX SDK (June 2010)\Include;..\Thirdparty\SDL2\Include;..\Thirdparty\Lua\include;..\Thirdparty\Lua\LuaBridge;$(IncludePath)</IncludePath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
@@ -81,7 +81,7 @@
       <ConformanceMode>true</ConformanceMode>
     </ClCompile>
     <Link>
-      <AdditionalDependencies>SDL2.lib;SDL2main.lib;SDL2test.lib;d3d11.lib;d3dx11.lib;d3dx10.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>SDL2.lib;SDL2main.lib;SDL2test.lib;d3d11.lib;d3dx11.lib;d3dx10.lib;lua53.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <SubSystem>Console</SubSystem>
     </Link>
   </ItemDefinitionGroup>
@@ -128,6 +128,7 @@
     <ClCompile Include="RenderWindow.cpp" />
     <ClCompile Include="RenderWorld.cpp" />
     <ClCompile Include="Resource.cpp" />
+    <ClCompile Include="Script.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Camera.h" />
@@ -135,6 +136,7 @@
     <ClInclude Include="RenderWindow.h" />
     <ClInclude Include="RenderWorld.h" />
     <ClInclude Include="Resource.h" />
+    <ClInclude Include="Script.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

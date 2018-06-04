@@ -3,6 +3,7 @@
 #include "Resource.h"
 #include "RenderWorld.h"
 #include "Camera.h"
+#include "Script.h"
 
 CEntity::CEntity(unsigned int id, std::shared_ptr<SMeshData> mesh_data)
 	: m_ID(id), m_MeshData(mesh_data)
