@@ -6,9 +6,10 @@
 #include <string>
 #include <map>
 
-class CRenderWorld;
-
 typedef void(*MsgListener)(const SDL_Event& sdl_evt);
+
+class CRenderWorld;
+class CEntityManager;
 
 class CRenderWindow
 {
@@ -22,6 +23,8 @@ public:
 	//listener is a function pointer
 	static bool RegisterMsgListener(const std::string& listener_name, MsgListener msg_listener);
 
+	void GetEntityManager(CEntityManager *mgr);
+	void AddEntityManager(CEntityManager *mgr);
 private:
 	SDL_Window * m_Window;
 	SDL_Surface *m_Surface;

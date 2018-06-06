@@ -101,3 +101,16 @@ bool CRenderWindow::RegisterMsgListener(const std::string& listener_name, MsgLis
 	s_MsgListenerMap.emplace(std::make_pair(listener_name, msg_listener));
 	return true;
 }
+
+void CRenderWindow::GetEntityManager(CEntityManager *mgr)
+{
+
+}
+
+void CRenderWindow::AddEntityManager(CEntityManager *mgr)
+{
+	if (m_RenderWorld)
+	{
+		m_RenderWorld->AddEntityManager(mgr);
+	}
+}

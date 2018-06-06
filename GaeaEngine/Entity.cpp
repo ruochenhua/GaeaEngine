@@ -48,7 +48,7 @@ void CEntity::SetRotation(const D3DXQUATERNION& rot)
 	m_Rotation = rot;
 }
 
-void CEntity::SetTransition(const D3DXVECTOR3& trans)
+void CEntity::SetTranslation(const D3DXVECTOR3& trans)
 {
 	m_Transition = trans;
 }
@@ -107,3 +107,4 @@ CEntity* CEntityManager::GetEntity(unsigned int id)
 	
 	return nullptr;
 }
+

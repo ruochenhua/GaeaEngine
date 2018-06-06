@@ -4,8 +4,8 @@
 
 #include "Script.h"
 #include "Entity.h"
-
-static lua_State *L;
+#include "RenderWindow.h"
+#include "RenderWorld.h"
 
 CScriptSystem::CScriptSystem()
 {
@@ -15,8 +15,8 @@ CScriptSystem::CScriptSystem()
 	lua_State* L = luaL_newstate();
 	luaL_openlibs(L);
 
-	//vec&quat
 	luabridge::getGlobalNamespace(L)
+		//vec&quat
 		.beginClass<D3DXVECTOR3>("D3DXVECTOR3")
 			.addProperty("x", &Vec3Helper::get<1>, &Vec3Helper::set<1>)
 			.addProperty("y", &Vec3Helper::get<2>, &Vec3Helper::set<2>)
@@ -29,19 +29,35 @@ CScriptSystem::CScriptSystem()
 			.addProperty("z", &QuatHelper::get<3>, &QuatHelper::set<3>)
 			.addProperty("w", &QuatHelper::get<4>, &QuatHelper::set<4>)
 		.endClass()
-	//Entity
-	
-		.beginClass<CEntity>("CEntity")
-	//	.addFunction()
+		//Entity
+		.beginClass<CEntity>("Entity")
+			.addFunction("GetScale", &CEntity::GetScale)
+			.addFunction("GetRotation", &CEntity::GetRotation)
+			.addFunction("GetTranslation", &CEntity::GetTranslation)
+			.addFunction("SetScale", &CEntity::SetScale)
+			.addFunction("SetRotation", &CEntity::SetRotation)
+			.addFunction("SetTranslation", &CEntity::SetTranslation)
 		.endClass()
 	
-	//EntityManager
-	
+		//EntityManager
 		.beginClass<CEntityManager>("EntityManager")
-		.addFunction("AddEntity", &CEntityManager::AddEntity)
-		.addFunction("RemoveEntity", &CEntityManager::AddEntity)
-		.addFunction("GetEntity", &CEntityManager::GetEntity)
-		.endClass();
+			.addConstructor<void(*)(void)>()
+			.addFunction("AddEntity", &CEntityManager::AddEntity)
+			.addFunction("RemoveEntity", &CEntityManager::RemoveEntity)
+			.addFunction("GetEntity", &CEntityManager::GetEntity)
+		.endClass()
+
+		//render window
+		.beginClass<CRenderWindow>("RenderWindow")
+			.addConstructor<void(*)(void)>()
+			.addFunction("Update", &CRenderWindow::Update)
+			//.addFunction("GetEntityManager", &CRenderWindow::GetEntityManager)
+			.addFunction("AddEntityManager", &CRenderWindow::AddEntityManager)
+		.endClass()
+
+		;
+
+	luaL_dofile(L, "../Assets/Scripts/main.lua");
 }
 
 CScriptSystem::~CScriptSystem()

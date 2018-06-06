@@ -1,6 +1,7 @@
 #pragma once
 #include <d3dx9math.h>
 #include <memory>
+
 #include "RenderWindow.h"
 
 struct SCamPerspective

@@ -9,6 +9,7 @@
 class CCameraManager;
 class CEntityManager;
 class CResourcesManager;
+class CModule;
 
 class CRenderWorld
 {
@@ -19,12 +20,14 @@ public:
 	static ID3D11Buffer *s_EntityTransformBuffer;
 
 	static bool s_FirstDraw;
+
 public:
 	CRenderWorld(HWND g_HWnd);
 	~CRenderWorld();
 	
 	void Update(double time_step);
-
+	void AddEntityManager(CEntityManager *mgr);
+	//void GetEntityManager(CEntityManager *mgr) { mgr = m_EntityMgr.get(); }
 private:
 
 	IDXGISwapChain *m_SwapChain;//½»»»Á´  
@@ -47,6 +50,9 @@ private:
 private:
 	//managers
 	std::unique_ptr<CCameraManager> m_CameraMgr;
-	std::unique_ptr<CEntityManager> m_EntityMgr;
+	//std::unique_ptr<CEntityManager> m_EntityMgr;
+	CEntityManager* m_EntityMgr;
 	std::unique_ptr<CResourcesManager> m_ResourceMgr;
+
+
 };

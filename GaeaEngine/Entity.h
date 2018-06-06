@@ -103,11 +103,11 @@ public:
 	//setter, getter
 	D3DXVECTOR3 GetScale() { return m_Scale; }
 	D3DXQUATERNION GetRotation() { return m_Rotation; }
-	D3DXVECTOR3 GetTransition() { return m_Transition; }
+	D3DXVECTOR3 GetTranslation() { return m_Transition; }
 
 	void SetScale(const D3DXVECTOR3& scale);
 	void SetRotation(const D3DXQUATERNION& rot);
-	void SetTransition(const D3DXVECTOR3& trans);
+	void SetTranslation(const D3DXVECTOR3& trans);
 
 private:
 	friend class CEntityManager;

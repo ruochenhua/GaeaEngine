@@ -5,8 +5,6 @@
 #include "Resource.h"
 #include "Entity.h"
 
-//Vertex Structure and Vertex Layout (Input Layout)//
-
 D3D11_INPUT_ELEMENT_DESC layout[] =
 {
 	{ "POSITION", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, 0, D3D11_INPUT_PER_VERTEX_DATA, 0 },
@@ -50,9 +48,10 @@ CRenderWorld::CRenderWorld(HWND g_HWnd)
 	m_CameraMgr.reset(new CCameraManager);
 	InitCamera((float)g_ScreenWidth / (float)g_ScreenHeight);
 
-	m_EntityMgr.reset(new CEntityManager);
+	//m_EntityMgr.reset(new CEntityManager);
 
 	//todo script system
+	/*
 	std::vector<int> id_vec(10);
 	for (int i = 0; i < id_vec.size(); ++i)
 	{
@@ -65,10 +64,10 @@ CRenderWorld::CRenderWorld(HWND g_HWnd)
 		if (entity)
 		{
 			D3DXVECTOR3 trans(i*2.0f, 0.0f, 0.0f);
-			entity->SetTransition(trans);
+			entity->SetTranslation(trans);
 		}
 	}
-	
+	*/
 }
 
 CRenderWorld::~CRenderWorld()
@@ -142,7 +141,11 @@ void CRenderWorld::Render()
 	//Refresh the Depth/Stencil view
 	s_D3DDeviceContext->ClearDepthStencilView(m_pDepthStencilView, D3D11_CLEAR_DEPTH | D3D11_CLEAR_STENCIL, 1.0f, 0);
 
-	m_EntityMgr->Render();
+	if (m_EntityMgr)
+	{
+		m_EntityMgr->Render();
+	}
+	
 	//Present the backbuffer to the screen
 	m_SwapChain->Present(0, 0);
 }
@@ -291,4 +294,9 @@ void CRenderWorld::InitCamera(float w_div_h)
 	perspective.aspect_ratio = w_div_h;
 	
 	m_CameraMgr->AddCamera("MainCam", eye, at, up, perspective);
+}
+
+void CRenderWorld::AddEntityManager(CEntityManager *mgr)
+{
+	m_EntityMgr = mgr;
 }
