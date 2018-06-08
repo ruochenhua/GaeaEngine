@@ -26,7 +26,8 @@ public:
 	~CRenderWorld();
 	
 	void Update(double time_step);
-	void AddEntityManager(CEntityManager *mgr);
+	void AddModule(const std::string& module_name, CModule* module_ptr);
+
 	//void GetEntityManager(CEntityManager *mgr) { mgr = m_EntityMgr.get(); }
 private:
 
@@ -44,15 +45,11 @@ private:
 	HRESULT InitDevice(HWND g_hWnd);
 	HRESULT InitScene();
 
-	void InitCamera(float w_div_h);
-
-	void Render();
 private:
+	void PreUpdate();
+	void PostUpdate();
+
 	//managers
 	std::unique_ptr<CCameraManager> m_CameraMgr;
-	//std::unique_ptr<CEntityManager> m_EntityMgr;
-	CEntityManager* m_EntityMgr;
-	std::unique_ptr<CResourcesManager> m_ResourceMgr;
-
-
+	std::map<std::string, CModule*> m_ModuleMap;
 };

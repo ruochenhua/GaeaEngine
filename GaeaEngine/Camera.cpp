@@ -1,13 +1,12 @@
 #include <iostream>
 #include "Camera.h"
 
-std::map<std::string, std::shared_ptr<CCamera>> g_CameraMap;
+std::map<std::string, CCamera*> g_CameraMap;
 
 CCamera *CCameraManager::s_MainCam = nullptr;
 
-CCamera::CCamera(const D3DXVECTOR3& eye, const D3DXVECTOR3& at, const D3DXVECTOR3& up, 
-	const SCamPerspective& perspective)
-	: m_Eye(eye), m_At(at), m_Up(up), m_CamPerspective(perspective)
+CCamera::CCamera()
+	: m_Eye(0.0,0.0,1.0), m_At(0.0,0.0,0.0), m_Up(0.0, 1.0, 0.0)
 {
 
 }
@@ -23,18 +22,24 @@ void CCamera::GetPerspectiveFovMatrix(D3DXMATRIX& out_mat)
 		m_CamPerspective.near_clip, m_CamPerspective.far_clip);
 }
 
-void CCamera::Transform(const D3DXVECTOR3& move_dir)
+void CCamera::SetEye(float x, float y, float z)
 {
-	D3DXVec3Add(&m_Eye, &m_Eye, &move_dir);
+	m_Eye = D3DXVECTOR3(x, y, z);
 }
 
-void CameraMsgHandler(const SDL_Event& sdl_evt);
+void CCamera::SetAt(float x, float y, float z)
+{
+	m_At = D3DXVECTOR3(x, y, z);
+}
+
+void CCamera::SetUp(float x, float y, float z)
+{
+	m_Up = D3DXVECTOR3(x, y, z);
+}
+
 CCameraManager::CCameraManager()
 {
-	m_MsgListener = CameraMsgHandler;
-	CRenderWindow::RegisterMsgListener("Camera", CameraMsgHandler);
 
-	s_MainCam = nullptr;
 }
 
 CCameraManager::~CCameraManager()
@@ -42,57 +47,11 @@ CCameraManager::~CCameraManager()
 
 }
 
-void CameraMsgHandler(const SDL_Event& sdl_evt)
+void CCameraManager::AddCamera(const char* cam_name, CCamera *camera)
 {
-	const char* out_info = nullptr;
-	D3DXVECTOR3 move_vec(0.0f, 0.0f, 0.0f);
-	if (sdl_evt.key.type == SDL_KEYDOWN)
-	{
-		switch (sdl_evt.key.keysym.sym)
-		{
-		case SDLK_w:
-			out_info = "W Key";
-			move_vec.x = 1.0f;
-			break;
-		case SDLK_s:
-			out_info = "S Key";
-			move_vec.x = -1.0f;
-			break;
-		case SDLK_a:
-			out_info = "A Key";
-			move_vec.y = 1.0f;
-			break;
-		case SDLK_d:
-			out_info = "D Key";
-			move_vec.y = -1.0f;
+	g_CameraMap.emplace(cam_name, camera);
 
-			break;
-
-		default:
-			break;
-		}
-	}
-	auto cam = CCameraManager::s_MainCam;
-	if (cam)
-	{
-		cam->Transform(move_vec);
-	}
-
-	if (out_info)
-	{
-		std::cout << out_info << std::endl;
-	}
-}
-
-
-void CCameraManager::AddCamera(const std::string& cam_name,
-	D3DXVECTOR3& eye, const D3DXVECTOR3& at, const D3DXVECTOR3& up,
-	const SCamPerspective& perspective)
-{
-	std::shared_ptr<CCamera> new_cam(new CCamera(eye, at, up, perspective));
-	g_CameraMap.emplace(cam_name, new_cam);
-
-	s_MainCam = new_cam.get();
+	s_MainCam = camera;
 }
 
 void CCameraManager::RemoveCamera(const std::string& cam_name)
@@ -105,7 +64,7 @@ void CCameraManager::SetMainCam(const std::string& name)
 	auto iter = g_CameraMap.find(name);
 	if (iter != g_CameraMap.end())
 	{
-		s_MainCam = iter->second.get();
+		s_MainCam = iter->second;
 	}
 }
 
@@ -114,7 +73,7 @@ CCamera *CCameraManager::GetCamera(const std::string& name)
 	auto iter = g_CameraMap.find(name);
 	if (iter != g_CameraMap.end())
 	{
-		return iter->second.get();
+		return iter->second;
 	}
 	else
 	{

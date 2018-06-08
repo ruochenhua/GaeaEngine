@@ -67,27 +67,7 @@ bool CRenderWindow::Update()
 		m_RenderWorld->Update(1.0f/60.0f);
 	}
 
-
-	DispatchMsg();
 	return m_DoUpdate;
-}
-
-void CRenderWindow::DispatchMsg()
-{
-	SDL_Event event;
-	while (SDL_PollEvent(&event))
-	{
-		if (event.key.type == SDL_KEYDOWN && event.key.keysym.sym == SDLK_ESCAPE)
-		{
-			m_DoUpdate = false;
-		}
-
-		auto iter = CRenderWindow::s_MsgListenerMap.begin();
-		for (; iter != s_MsgListenerMap.end(); ++iter)
-		{
-			iter->second(event);
-		}
-	}
 }
 
 void CRenderWindow::InitRenderWorld()
@@ -95,22 +75,10 @@ void CRenderWindow::InitRenderWorld()
 	m_RenderWorld.reset(new CRenderWorld(GetWindowHandle()));
 }
 
-std::map<std::string, MsgListener> CRenderWindow::s_MsgListenerMap;
-bool CRenderWindow::RegisterMsgListener(const std::string& listener_name, MsgListener msg_listener)
-{
-	s_MsgListenerMap.emplace(std::make_pair(listener_name, msg_listener));
-	return true;
-}
-
-void CRenderWindow::GetEntityManager(CEntityManager *mgr)
-{
-
-}
-
-void CRenderWindow::AddEntityManager(CEntityManager *mgr)
+void CRenderWindow::AddModule(const std::string& module_name, CModule* module_ptr)
 {
 	if (m_RenderWorld)
 	{
-		m_RenderWorld->AddEntityManager(mgr);
+		m_RenderWorld->AddModule(module_name, module_ptr);
 	}
 }

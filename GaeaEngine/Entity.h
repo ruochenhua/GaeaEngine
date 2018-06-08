@@ -4,6 +4,7 @@
 #include <d3dx9math.h>
 #include <tuple>
 
+#include "Module.h"
 struct SMeshData;
 
 struct Vec3Helper
@@ -105,9 +106,9 @@ public:
 	D3DXQUATERNION GetRotation() { return m_Rotation; }
 	D3DXVECTOR3 GetTranslation() { return m_Transition; }
 
-	void SetScale(const D3DXVECTOR3& scale);
-	void SetRotation(const D3DXQUATERNION& rot);
-	void SetTranslation(const D3DXVECTOR3& trans);
+	void SetScale(float x, float y, float z);
+	void SetRotation(float x, float y, float z, float w);
+	void SetTranslation(float x, float y, float z);
 
 private:
 	friend class CEntityManager;
@@ -123,7 +124,7 @@ private:
 
 #include "Script.h"
 
-class CEntityManager
+class CEntityManager : public CModule
 {
 public:
 	CEntityManager();
@@ -133,6 +134,8 @@ public:
 	CEntity* GetEntity(unsigned int id);
 
 	void Render();
+
+	virtual void Update() override;
 
 private:
 	std::vector<std::unique_ptr<CEntity>> m_Entities;

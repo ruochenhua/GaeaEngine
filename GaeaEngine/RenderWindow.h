@@ -10,6 +10,7 @@ typedef void(*MsgListener)(const SDL_Event& sdl_evt);
 
 class CRenderWorld;
 class CEntityManager;
+class CModule;
 
 class CRenderWindow
 {
@@ -20,11 +21,8 @@ public:
 	//更新窗口
 	bool Update();
 
-	//listener is a function pointer
-	static bool RegisterMsgListener(const std::string& listener_name, MsgListener msg_listener);
+	void AddModule(const std::string& module_name, CModule* module_ptr);
 
-	void GetEntityManager(CEntityManager *mgr);
-	void AddEntityManager(CEntityManager *mgr);
 private:
 	SDL_Window * m_Window;
 	SDL_Surface *m_Surface;
@@ -36,8 +34,4 @@ private:
 	void InitRenderWorld();
 	//获取窗口的句柄
 	HWND GetWindowHandle();
-	//按键信息， 暂时这么放一下
-	void DispatchMsg();
-
-	static std::map<std::string, MsgListener> s_MsgListenerMap;
 };

@@ -125,6 +125,7 @@
     <ClCompile Include="Camera.cpp" />
     <ClCompile Include="Entity.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="Message.cpp" />
     <ClCompile Include="RenderWindow.cpp" />
     <ClCompile Include="RenderWorld.cpp" />
     <ClCompile Include="Resource.cpp" />
@@ -133,6 +134,8 @@
   <ItemGroup>
     <ClInclude Include="Camera.h" />
     <ClInclude Include="Entity.h" />
+    <ClInclude Include="Message.h" />
+    <ClInclude Include="Module.h" />
     <ClInclude Include="RenderWindow.h" />
     <ClInclude Include="RenderWorld.h" />
     <ClInclude Include="Resource.h" />

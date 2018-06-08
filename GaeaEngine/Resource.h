@@ -36,9 +36,12 @@ public:
 	static std::shared_ptr<SMeshData> GetMeshData(const std::string& name);
 	CResourcesManager();
 
-	//todo: mesh file loading using script(Lua)
+	//after the d3d device has been init
+	void InitBasicMesh();
 private:
 
 	//name(usually predefined or file path) and mesh data
 	static std::map<std::string, std::shared_ptr<SMeshData>> m_MeshMap;
 };
+
+CResourcesManager *GetResourceMgr();

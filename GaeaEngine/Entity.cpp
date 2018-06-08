@@ -38,19 +38,19 @@ void CEntity::Render()
 	}
 }
 
-void CEntity::SetScale(const D3DXVECTOR3& scale)
+void CEntity::SetScale(float x, float y, float z)
 {
-	m_Scale = scale;
+	m_Scale = D3DXVECTOR3(x,y,z);
 }
 
-void CEntity::SetRotation(const D3DXQUATERNION& rot)
+void CEntity::SetRotation(float x, float y, float z, float w)
 {
-	m_Rotation = rot;
+	m_Rotation = D3DXQUATERNION(x,y,z,w);
 }
 
-void CEntity::SetTranslation(const D3DXVECTOR3& trans)
+void CEntity::SetTranslation(float x, float y, float z)
 {
-	m_Transition = trans;
+	m_Transition = D3DXVECTOR3(x,y,z);
 }
 
 const int MAX_ENTITY_NUM = 100;
@@ -68,6 +68,11 @@ void CEntityManager::Render()
 			e->Render();
 		}
 	}
+}
+
+void CEntityManager::Update()
+{
+	Render();
 }
 
 unsigned int CEntityManager::AddEntity(const std::string& mesh_name)

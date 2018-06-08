@@ -111,11 +111,7 @@ SMeshData::SMeshData(const std::vector<SVERTEX>& vertices, const std::vector<DWO
 
 CResourcesManager::CResourcesManager()
 {
-	//pre defined cube data;
-	std::shared_ptr<SMeshData> cube_mesh;
-	cube_mesh.reset(CreatePredefinedCubeMesh());
 
-	m_MeshMap.emplace("cube", cube_mesh);
 }
 
 std::shared_ptr<SMeshData> CResourcesManager::GetMeshData(const std::string& name)
@@ -129,4 +125,19 @@ std::shared_ptr<SMeshData> CResourcesManager::GetMeshData(const std::string& nam
 	{
 		return nullptr;
 	}
+}
+
+void CResourcesManager::InitBasicMesh()
+{
+	//pre defined cube data;
+	std::shared_ptr<SMeshData> cube_mesh;
+	cube_mesh.reset(CreatePredefinedCubeMesh());
+
+	m_MeshMap.emplace("cube", cube_mesh);
+}
+
+CResourcesManager g_ResMgr;
+CResourcesManager* GetResourceMgr()
+{
+	return &g_ResMgr;
 }

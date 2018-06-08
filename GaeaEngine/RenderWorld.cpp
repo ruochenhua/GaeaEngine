@@ -44,30 +44,7 @@ CRenderWorld::CRenderWorld(HWND g_HWnd)
 	assert(InitDevice(g_HWnd) == S_OK);
 	assert(InitScene() == S_OK);
 	
-	m_ResourceMgr.reset(new CResourcesManager);
-	m_CameraMgr.reset(new CCameraManager);
-	InitCamera((float)g_ScreenWidth / (float)g_ScreenHeight);
-
-	//m_EntityMgr.reset(new CEntityManager);
-
-	//todo script system
-	/*
-	std::vector<int> id_vec(10);
-	for (int i = 0; i < id_vec.size(); ++i)
-	{
-		id_vec[i] = m_EntityMgr->AddEntity("cube");
-	}
-	
-	for (int i = 0; i < id_vec.size(); ++i)
-	{
-		CEntity *entity = m_EntityMgr->GetEntity(id_vec[i]);
-		if (entity)
-		{
-			D3DXVECTOR3 trans(i*2.0f, 0.0f, 0.0f);
-			entity->SetTranslation(trans);
-		}
-	}
-	*/
+	GetResourceMgr()->InitBasicMesh();
 }
 
 CRenderWorld::~CRenderWorld()
@@ -133,7 +110,7 @@ CRenderWorld::~CRenderWorld()
 	}
 }
 
-void CRenderWorld::Render()
+void CRenderWorld::PreUpdate()
 {
 	float bgColor[4] = { (0.0f, 0.0f, 0.0f, 0.0f) };
 	s_D3DDeviceContext->ClearRenderTargetView(m_RenderTargetView, bgColor);
@@ -141,11 +118,10 @@ void CRenderWorld::Render()
 	//Refresh the Depth/Stencil view
 	s_D3DDeviceContext->ClearDepthStencilView(m_pDepthStencilView, D3D11_CLEAR_DEPTH | D3D11_CLEAR_STENCIL, 1.0f, 0);
 
-	if (m_EntityMgr)
-	{
-		m_EntityMgr->Render();
-	}
-	
+}
+
+void CRenderWorld::PostUpdate()
+{
 	//Present the backbuffer to the screen
 	m_SwapChain->Present(0, 0);
 }
@@ -274,7 +250,12 @@ HRESULT CRenderWorld::InitScene()
 
 void CRenderWorld::Update(double time_step)
 {
-	Render();
+	PreUpdate();
+
+	for (auto iter : m_ModuleMap)
+	{
+		iter.second->Update();
+	}
 
 	CCamera* main_cam = m_CameraMgr->GetCamera("MainCam");
 	if (main_cam)
@@ -282,21 +263,11 @@ void CRenderWorld::Update(double time_step)
 		main_cam->GetLookAtMatrix(g_View);
 		main_cam->GetPerspectiveFovMatrix(g_Projection);
 	}
+
+	PostUpdate();
 }
 
-void CRenderWorld::InitCamera(float w_div_h)
+void CRenderWorld::AddModule(const std::string& module_name, CModule* module_ptr)
 {
-	D3DXVECTOR3 eye(0, 1, -5);
-	D3DXVECTOR3 at(0, 0, 0);
-	D3DXVECTOR3 up(0, 1, 0);
-	SCamPerspective perspective;
-	perspective.fov = 0.4f*3.14f;
-	perspective.aspect_ratio = w_div_h;
-	
-	m_CameraMgr->AddCamera("MainCam", eye, at, up, perspective);
-}
-
-void CRenderWorld::AddEntityManager(CEntityManager *mgr)
-{
-	m_EntityMgr = mgr;
+	m_ModuleMap.emplace(module_name, module_ptr);
 }
