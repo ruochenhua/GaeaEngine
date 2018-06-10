@@ -70,7 +70,7 @@
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
-    <LibraryPath>C:\Program Files (x86)\Microsoft DirectX SDK (June 2010)\Lib\x86;..\Thirdparty\SDL2\Lib\x86\Debug;E:\Garage\GaeaEngine\Thirdparty\Lua\lib;$(LibraryPath)</LibraryPath>
+    <LibraryPath>C:\Program Files (x86)\Microsoft DirectX SDK (June 2010)\Lib\x86;..\Thirdparty\SDL2\Lib\x86\Debug;..\Thirdparty\Lua\lib;$(LibraryPath)</LibraryPath>
     <IncludePath>C:\Program Files (x86)\Microsoft DirectX SDK (June 2010)\Include;..\Thirdparty\SDL2\Include;..\Thirdparty\Lua\include;..\Thirdparty\Lua\LuaBridge;$(IncludePath)</IncludePath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
