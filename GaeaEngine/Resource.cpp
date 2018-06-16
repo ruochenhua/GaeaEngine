@@ -1,61 +1,9 @@
 #include "Resource.h"
 #include "RenderWorld.h"
 
-SMeshData* CreatePredefinedCubeMesh()
-{
-	SVERTEX cube_vert[] =
-	{
-		{ -1.0f, -1.0f, -1.0f, D3DXCOLOR(1.0f, 1.0f, 0.0f, 1.0f) },
-		{ -1.0f, +1.0f, -1.0f, D3DXCOLOR(0.0f, 1.0f, 0.0f, 1.0f) },
-		{ +1.0f, +1.0f, -1.0f, D3DXCOLOR(1.0f, 0.0f, 0.0f, 1.0f) },
-		{ +1.0f, -1.0f, -1.0f, D3DXCOLOR(0.0f, 0.0f, 1.0f, 1.0f) },
-		{ -1.0f, -1.0f, +1.0f, D3DXCOLOR(1.0f, 0.0f, 0.0f, 1.0f) },
-		{ -1.0f, +1.0f, +1.0f, D3DXCOLOR(0.0f, 1.0f, 1.0f, 1.0f) },
-		{ +1.0f, +1.0f, +1.0f, D3DXCOLOR(1.0f, 0.0f, 1.0f, 1.0f) },
-		{ +1.0f, -1.0f, +1.0f, D3DXCOLOR(0.0f, 0.0f, 1.0f, 1.0f) },
-	};
-
-	DWORD cube_idx[] =
-	{
-		// front face
-		0, 1, 2,
-		0, 2, 3,
-
-		// back face
-		4, 6, 5,
-		4, 7, 6,
-
-		// left face
-		4, 5, 1,
-		4, 1, 0,
-
-		// right face
-		3, 2, 6,
-		3, 6, 7,
-
-		// top face
-		1, 5, 6,
-		1, 6, 2,
-
-		// bottom face
-		4, 0, 3,
-		4, 3, 7
-	};
-
-	std::vector<SVERTEX> vert_data(8);
-	memcpy(&vert_data[0], &cube_vert[0], sizeof(SVERTEX) * 8);
-
-	std::vector<DWORD> idx_data(36);
-	memcpy(&idx_data[0], &cube_idx[0], sizeof(DWORD) * 36);
-
-	SMeshData* cube_mesh = new SMeshData(vert_data, idx_data);
-
-	return cube_mesh;
-}
-
 std::map<std::string, std::shared_ptr<SMeshData>> CResourcesManager::m_MeshMap;
 
-SMeshData::SMeshData(const std::vector<SVERTEX>& vertices, const std::vector<DWORD>& indices)
+SMeshData::SMeshData(const std::vector<SVERTEX>& vertices, const std::vector<uint16_t>& indices)
 	: vert_data(vertices), idx_data(indices)
 {
 	HRESULT hr;
@@ -91,7 +39,7 @@ SMeshData::SMeshData(const std::vector<SVERTEX>& vertices, const std::vector<DWO
 	D3D11_BUFFER_DESC i_bd;
 	ZeroMemory(&i_bd, sizeof(i_bd));
 	
-	unsigned int idx_size = sizeof(DWORD) * indices.size();
+	unsigned int idx_size = sizeof(uint16_t) * indices.size();
 	i_bd.Usage = D3D11_USAGE_DEFAULT;
 	i_bd.ByteWidth = idx_size;
 	i_bd.BindFlags = D3D11_BIND_INDEX_BUFFER;
@@ -105,13 +53,24 @@ SMeshData::SMeshData(const std::vector<SVERTEX>& vertices, const std::vector<DWO
 
 	hr = CRenderWorld::s_D3Ddevice->CreateBuffer(&i_bd, &init_data, &ib);
 
-	CRenderWorld::s_D3DDeviceContext->IASetIndexBuffer(ib, DXGI_FORMAT_R32_UINT, 0);
-
+	CRenderWorld::s_D3DDeviceContext->IASetIndexBuffer(ib, DXGI_FORMAT_R16_UINT, 0);
 }
 
 CResourcesManager::CResourcesManager()
 {
 
+}
+
+bool CResourcesManager::LoadModel(const std::string& model_name, const std::string& file_path)
+{
+	std::vector<SPRIMITIVE> model_prim;
+	std::vector<SVERTEX> model_vert;
+	std::vector<uint16_t> model_idx;
+	m_AssimpImporter.LoadFBXFile(file_path, model_prim, model_vert, model_idx);
+
+	SMeshData* model_mesh = new SMeshData(model_vert, model_idx);
+	m_MeshMap.emplace("Sting", model_mesh);
+	return true;
 }
 
 std::shared_ptr<SMeshData> CResourcesManager::GetMeshData(const std::string& name)
@@ -125,19 +84,4 @@ std::shared_ptr<SMeshData> CResourcesManager::GetMeshData(const std::string& nam
 	{
 		return nullptr;
 	}
-}
-
-void CResourcesManager::InitBasicMesh()
-{
-	//pre defined cube data;
-	std::shared_ptr<SMeshData> cube_mesh;
-	cube_mesh.reset(CreatePredefinedCubeMesh());
-
-	m_MeshMap.emplace("cube", cube_mesh);
-}
-
-CResourcesManager g_ResMgr;
-CResourcesManager* GetResourceMgr()
-{
-	return &g_ResMgr;
 }

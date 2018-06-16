@@ -48,6 +48,9 @@
     <ClCompile Include="Message.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="AssimpImporter.cpp">
+      <Filter>Source Files\Entity</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="RenderWorld.h">
@@ -73,6 +76,9 @@
     </ClInclude>
     <ClInclude Include="Message.h">
       <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="AssimpImporter.h">
+      <Filter>Source Files\Entity</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

@@ -8,3 +8,5 @@
 *.exe
 *.opendb
 *.db
+*.ipch
+*.xml

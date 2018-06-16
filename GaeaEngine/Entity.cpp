@@ -33,8 +33,8 @@ void CEntity::Render()
 
 
 			// draw the vertex buffer to the back buffer
-		CRenderWorld::s_D3DDeviceContext->DrawIndexed(36, 0, 0);
-		//CRenderWorld::s_D3DDeviceContext->Draw(3, 0);
+		
+		CRenderWorld::s_D3DDeviceContext->DrawIndexed(m_MeshData->idx_data.size() , 0, 0);
 	}
 }
 

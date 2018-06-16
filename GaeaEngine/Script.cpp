@@ -9,6 +9,7 @@
 #include "Module.h"
 #include "Camera.h"
 #include "Message.h"
+#include "Resource.h"
 
 CScriptSystem::CScriptSystem()
 {
@@ -42,10 +43,16 @@ CScriptSystem::CScriptSystem()
 		.addFunction("SetTranslation", &CEntity::SetTranslation)
 		.endClass()
 
-		//EntityManager
 		.beginClass<CModule>("Module")
 		.endClass()
 
+		//ResourcesManager
+		.deriveClass<CResourcesManager, CModule>("ResourcesManager")
+		.addConstructor<void(*)(void)>()
+		.addFunction("LoadModel", &CResourcesManager::LoadModel)
+		.endClass()
+
+		//EntityManager
 		.deriveClass<CEntityManager, CModule>("EntityManager")
 		.addConstructor<void(*)(void)>()
 		.addFunction("AddEntity", &CEntityManager::AddEntity)
