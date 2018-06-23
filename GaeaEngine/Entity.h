@@ -6,6 +6,12 @@
 
 #include "Module.h"
 struct SMeshData;
+struct SEntityTransConstBuffer
+{
+	D3DXMATRIX world;
+	D3DXMATRIX view;
+	D3DXMATRIX project;
+};
 
 struct Vec3Helper
 {

@@ -1,9 +1,14 @@
 #pragma once
 #include <d3dx9math.h>
 #include <memory>
-
+	
 #include "RenderWindow.h"
 #include "Module.h"
+
+struct SCamConstBuffer
+{
+	D3DXVECTOR3 cam_pos;
+};
 
 struct SCamPerspective
 {
@@ -17,6 +22,7 @@ class CCamera
 public:
 	CCamera();
 
+	void GetTransformMatrix(D3DXMATRIX& out_mat);
 	void GetLookAtMatrix(D3DXMATRIX& out_mat);
 	void GetPerspectiveFovMatrix(D3DXMATRIX& out_mat);
 
@@ -50,7 +56,7 @@ public:
 	static CCamera *s_MainCam;
 
 	CCamera* GetCamera(const std::string& name);
-	virtual void Update() override {}
+	virtual void Update() override;
 private:
 	MsgListener m_MsgListener;
 };

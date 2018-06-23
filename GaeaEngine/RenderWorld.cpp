@@ -9,8 +9,6 @@ D3D11_INPUT_ELEMENT_DESC layout[] =
 {
 	{ "POSITION", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, 0, D3D11_INPUT_PER_VERTEX_DATA, 0 },
 	{ "NORMAL", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, 12, D3D11_INPUT_PER_VERTEX_DATA, 0},
-//	{ "TEXCOORD0", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, 24, D3D11_INPUT_PER_VERTEX_DATA, 0},
-//	{ "COLOR", 0, DXGI_FORMAT_R32G32B32A32_FLOAT, 0, 36, D3D11_INPUT_PER_VERTEX_DATA, 0 },
 };
 UINT numElements = ARRAYSIZE(layout);
 
@@ -20,6 +18,7 @@ D3DXMATRIX g_Projection;
 ID3D11Device *CRenderWorld::s_D3Ddevice = nullptr;
 ID3D11DeviceContext *CRenderWorld::s_D3DDeviceContext = nullptr;
 ID3D11Buffer *CRenderWorld::s_EntityTransformBuffer = nullptr;
+ID3D11Buffer *CRenderWorld::s_CameraTransformBuffer = nullptr;
 
 ID3D11Buffer* squareIndexBuffer;
 ID3D11Buffer* squareVertBuffer;
@@ -112,7 +111,7 @@ CRenderWorld::~CRenderWorld()
 
 void CRenderWorld::PreUpdate()
 {
-	float bgColor[4] = { (0.0f, 0.0f, 0.0f, 0.0f) };
+	float bgColor[4] = { (1.0f, 0.3f, 0.2f, 0.3f) };
 	s_D3DDeviceContext->ClearRenderTargetView(m_RenderTargetView, bgColor);
 
 	//Refresh the Depth/Stencil view
@@ -198,8 +197,8 @@ HRESULT CRenderWorld::InitScene()
 	HRESULT hr;
 	ID3D10Blob *vs, *ps;
 
-	D3DX11CompileFromFile("..\\Assets\\Shaders\\HLSL\\shaders1.shader", 0, 0, "VS", "vs_4_0", 0, 0, 0, &vs, 0, 0);
-	D3DX11CompileFromFile("..\\Assets\\Shaders\\HLSL\\shaders1.shader", 0, 0, "PS", "ps_4_0", 0, 0, 0, &ps, 0, 0);
+	D3DX11CompileFromFile("../Assets/Shaders/HLSL/shaders.hlsl", 0, 0, "VS", "vs_4_0", 0, 0, 0, &vs, 0, 0);
+	D3DX11CompileFromFile("../Assets/Shaders/HLSL/shaders.hlsl", 0, 0, "PS", "ps_4_0", 0, 0, 0, &ps, 0, 0);
 
 	//Create the Shader Objects
 	s_D3Ddevice->CreateVertexShader(vs->GetBufferPointer(), vs->GetBufferSize(), NULL, &m_VS);
@@ -238,12 +237,22 @@ HRESULT CRenderWorld::InitScene()
 	ZeroMemory(&cbbd, sizeof(D3D11_BUFFER_DESC));
 
 	cbbd.Usage = D3D11_USAGE_DEFAULT;
-	cbbd.ByteWidth = sizeof(D3DXMATRIX);
+	cbbd.ByteWidth = sizeof(SEntityTransConstBuffer);
 	cbbd.BindFlags = D3D11_BIND_CONSTANT_BUFFER;
 	cbbd.CPUAccessFlags = 0;
 	cbbd.MiscFlags = 0;
 
 	hr = s_D3Ddevice->CreateBuffer(&cbbd, NULL, &s_EntityTransformBuffer);
+
+	D3D11_BUFFER_DESC cam_bd;
+	ZeroMemory(&cam_bd, sizeof(D3D11_BUFFER_DESC));
+	cam_bd.Usage = D3D11_USAGE_DEFAULT;
+	cam_bd.ByteWidth = sizeof(SCamConstBuffer);
+	cam_bd.BindFlags = D3D11_BIND_CONSTANT_BUFFER;
+	cam_bd.CPUAccessFlags = 0;
+	cam_bd.MiscFlags = 0;
+
+	hr = s_D3Ddevice->CreateBuffer(&cam_bd, NULL, &s_CameraTransformBuffer);
 
 	return S_OK;
 }
@@ -255,13 +264,6 @@ void CRenderWorld::Update(double time_step)
 	for (auto iter : m_ModuleMap)
 	{
 		iter.second->Update();
-	}
-
-	CCamera* main_cam = m_CameraMgr->GetCamera("MainCam");
-	if (main_cam)
-	{
-		main_cam->GetLookAtMatrix(g_View);
-		main_cam->GetPerspectiveFovMatrix(g_Projection);
 	}
 
 	PostUpdate();

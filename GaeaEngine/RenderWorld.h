@@ -18,6 +18,7 @@ public:
 	static ID3D11DeviceContext *s_D3DDeviceContext;
 	
 	static ID3D11Buffer *s_EntityTransformBuffer;
+	static ID3D11Buffer *s_CameraTransformBuffer;
 
 	static bool s_FirstDraw;
 

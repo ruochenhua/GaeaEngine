@@ -9,7 +9,7 @@ CEntity::CEntity(unsigned int id, std::shared_ptr<SMeshData> mesh_data)
 	: m_ID(id), m_MeshData(mesh_data)
 	, m_Scale(1.0f, 1.0f, 1.0f)
 	, m_Rotation(0.0f, 0.0f, 0.0f, 1.0f)
-	, m_Transition(0.0f, 0.0f, 0.0f)
+	, m_Transition(1.0f, 0.0f, 1.0f)
 {
 
 }
@@ -18,21 +18,23 @@ void CEntity::Render()
 {
 	if (CCameraManager::s_MainCam)
 	{
+		
 		D3DXMATRIX look_mat, pers_mat;
 		CCameraManager::s_MainCam->GetLookAtMatrix(look_mat);
 		CCameraManager::s_MainCam->GetPerspectiveFovMatrix(pers_mat);
 
 		D3DXMATRIX trans_matrix;
 		D3DXMatrixTransformation(&trans_matrix, 0, 0, &m_Scale, 0, &m_Rotation, &m_Transition);
-		D3DXMATRIX WVP = trans_matrix * look_mat * pers_mat;
 
-		D3DXMatrixTranspose(&WVP, &WVP);
-	
-		CRenderWorld::s_D3DDeviceContext->UpdateSubresource(CRenderWorld::s_EntityTransformBuffer, 0, nullptr, &WVP, 0, 0);
+		SEntityTransConstBuffer et_buffer;
+		D3DXMatrixTranspose(&et_buffer.world, &trans_matrix);
+		D3DXMatrixTranspose(&et_buffer.view, &look_mat);
+		D3DXMatrixTranspose(&et_buffer.project, &pers_mat);
+
+		CRenderWorld::s_D3DDeviceContext->UpdateSubresource(CRenderWorld::s_EntityTransformBuffer, 0, nullptr, &et_buffer, 0, 0);
 		CRenderWorld::s_D3DDeviceContext->VSSetConstantBuffers(0, 1, &CRenderWorld::s_EntityTransformBuffer);
-
-
-			// draw the vertex buffer to the back buffer
+		
+		// draw the vertex buffer to the back buffer
 		
 		CRenderWorld::s_D3DDeviceContext->DrawIndexed(m_MeshData->idx_data.size() , 0, 0);
 	}
