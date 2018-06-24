@@ -3,6 +3,15 @@
 #include <vector>
 
 struct lua_State;
+struct SInputMsg 
+{
+	int type;	//up,down,motion(mouse)
+	int key;
+
+	//only mouse msg will need this
+	int x;
+	int y;
+};
 
 class CMessageManager : public CModule
 {
@@ -10,11 +19,8 @@ public:
 	CMessageManager();
 	virtual void Update() override;
 
-	int GetKeyDownQueue(lua_State* L);
-	int GetKeyUpQueue(lua_State* L);
+	int GetInputMsgQueue(lua_State *L);
 
 private:
-	std::vector<int> m_KeyDownQueue;
-	std::vector<int> m_KeyUpQueue;
-	//todo mouse message
+	std::vector<SInputMsg> m_InputMsgQueue;
 };

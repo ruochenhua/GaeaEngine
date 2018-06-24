@@ -80,5 +80,8 @@
     <ClInclude Include="AssimpImporter.h">
       <Filter>Source Files\Entity</Filter>
     </ClInclude>
+    <ClInclude Include="LuaMath.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

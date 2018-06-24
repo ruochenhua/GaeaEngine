@@ -141,6 +141,7 @@
     <ClInclude Include="AssimpImporter.h" />
     <ClInclude Include="Camera.h" />
     <ClInclude Include="Entity.h" />
+    <ClInclude Include="LuaMath.h" />
     <ClInclude Include="Message.h" />
     <ClInclude Include="Module.h" />
     <ClInclude Include="RenderWindow.h" />

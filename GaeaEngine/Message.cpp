@@ -5,8 +5,7 @@
 
 CMessageManager::CMessageManager()
 {
-	m_KeyDownQueue.reserve(100);
-	m_KeyUpQueue.reserve(100);
+	m_InputMsgQueue.reserve(100);
 }
 
 void CMessageManager::Update()
@@ -14,38 +13,45 @@ void CMessageManager::Update()
 	SDL_Event event;
 	while (SDL_PollEvent(&event))
 	{
-		if (event.key.type == SDL_KEYDOWN)
+		SInputMsg input_msg;
+		input_msg.type = event.type;
+		if (event.type == SDL_KEYUP || event.type == SDL_KEYDOWN)
 		{
-			m_KeyDownQueue.push_back(event.key.keysym.sym);
+			input_msg.key = event.key.keysym.sym;
+		}
+		else if (event.type == SDL_MOUSEBUTTONDOWN || event.type == SDL_MOUSEBUTTONUP || event.type == SDL_MOUSEMOTION)
+		{
+			input_msg.key = event.button.button;
+		}
+		else
+		{
+			input_msg.key = -1;
 		}
 
-		if (event.key.type == SDL_KEYUP)
-		{
-			m_KeyUpQueue.push_back(event.key.keysym.sym);
-		}
+		
+		input_msg.x = event.button.x;
+		input_msg.y = event.button.y;
+		
+		m_InputMsgQueue.push_back(input_msg);
 	}
 }
 
-int CMessageManager::GetKeyDownQueue(lua_State* L)
+int CMessageManager::GetInputMsgQueue(lua_State* L)
 {
-	int queue_size = m_KeyDownQueue.size();
+	int queue_size = m_InputMsgQueue.size();
 	for (int i = 0; i < queue_size; ++i)
 	{
-		lua_pushnumber(L, m_KeyDownQueue[i]);
+		lua_newtable(L);
+		lua_pushnumber(L, m_InputMsgQueue[i].type);
+		lua_setfield(L, -2, "type");
+		lua_pushnumber(L, m_InputMsgQueue[i].key);
+		lua_setfield(L, -2, "key");
+		lua_pushnumber(L, m_InputMsgQueue[i].x);
+		lua_setfield(L, -2, "x");
+		lua_pushnumber(L, m_InputMsgQueue[i].y);
+		lua_setfield(L, -2, "y");
 	}
 
-	m_KeyDownQueue.clear();
-	return queue_size;
-}
-
-int CMessageManager::GetKeyUpQueue(lua_State* L)
-{
-	int queue_size = m_KeyUpQueue.size();
-	for (int i = 0; i < queue_size; ++i)
-	{
-		lua_pushnumber(L, m_KeyUpQueue[i]);
-	}
-
-	m_KeyUpQueue.clear();
+	m_InputMsgQueue.clear();
 	return queue_size;
 }

@@ -35,7 +35,6 @@ unsigned int g_ScreenWidth;
 unsigned int g_ScreenHeight;
 
 CRenderWorld::CRenderWorld(HWND g_HWnd)
-//	: m_SwapChain(nullptr), m_RenderTargetView(nullptr)
 {
 	RECT rect;
 	GetClientRect(g_HWnd, &rect);

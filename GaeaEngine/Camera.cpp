@@ -44,6 +44,58 @@ void CCamera::SetUp(float x, float y, float z)
 	m_Up = D3DXVECTOR3(x, y, z);
 }
 
+void CCamera::Move(float x, float y, float z)
+{
+	D3DXVECTOR3 move_vec(x, y, z);
+	D3DXVec3Add(&m_Eye, &m_Eye, &move_vec);
+	D3DXVec3Add(&m_At, &m_At, &move_vec);
+}
+
+void CCamera::Rotate(float x, float y, float z)
+{
+	//TODO better control?
+	/*
+	D3DXVECTOR3 right;
+	D3DXVECTOR3 dir;
+	D3DXVec3Subtract(&dir, &m_At, &m_Eye);
+	D3DXVec3Cross(&right, &dir, &m_Up);
+	D3DXVec3Normalize(&right, &right);
+
+	float cam_length = D3DXVec3Length(&dir);
+
+	D3DXVECTOR3 up_dist, right_dist;
+	D3DXVec3Scale(&up_dist, &m_Up, z);
+	D3DXVec3Scale(&right_dist, &right, x);
+
+	D3DXVec3Add(&m_At, &m_At, &up_dist);
+	//update upvec
+	D3DXVec3Subtract(&dir, &m_At, &m_Eye);
+	D3DXVec3Cross(&m_Up, &right, &dir);
+	D3DXVec3Normalize(&m_Up, &m_Up);
+
+	D3DXVec3Add(&m_At, &m_At, &right_dist);
+	D3DXVec3Subtract(&dir, &m_At, &m_Eye);
+
+	D3DXVec3Normalize(&dir, &dir);
+	D3DXVec3Scale(&dir, &dir, cam_length);
+	D3DXVec3Add(&m_At, &m_Eye, &dir);
+
+
+	*/
+	D3DXMATRIX rot_mat;
+	D3DXMatrixRotationYawPitchRoll(&rot_mat, y, x, z);
+
+	D3DXVECTOR3 look_dir;
+	D3DXVec3Subtract(&look_dir, &m_At, &m_Eye);
+	D3DXVec3TransformCoord(&look_dir, &look_dir, &rot_mat);
+
+	D3DXVec3Add(&m_At, &m_Eye, &look_dir);
+	D3DXVec3TransformCoord(&m_Up, &m_Up, &rot_mat);
+
+	
+	
+}
+
 CCameraManager::CCameraManager()
 {
 

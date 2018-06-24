@@ -10,6 +10,7 @@
 #include "Camera.h"
 #include "Message.h"
 #include "Resource.h"
+#include "LuaMath.h"
 
 CScriptSystem::CScriptSystem()
 {
@@ -22,12 +23,14 @@ CScriptSystem::CScriptSystem()
 	luabridge::getGlobalNamespace(L)
 		//vec&quat
 		.beginClass<D3DXVECTOR3>("D3DXVECTOR3")
+		.addConstructor<void(*)(void)>()
 		.addProperty("x", &Vec3Helper::get<1>, &Vec3Helper::set<1>)
 		.addProperty("y", &Vec3Helper::get<2>, &Vec3Helper::set<2>)
 		.addProperty("z", &Vec3Helper::get<3>, &Vec3Helper::set<3>)
 		.endClass()
 
 		.beginClass<D3DXQUATERNION>("D3DXQUATERNION")
+		.addConstructor<void(*)(void)>()
 		.addProperty("x", &QuatHelper::get<1>, &QuatHelper::set<1>)
 		.addProperty("y", &QuatHelper::get<2>, &QuatHelper::set<2>)
 		.addProperty("z", &QuatHelper::get<3>, &QuatHelper::set<3>)
@@ -69,6 +72,8 @@ CScriptSystem::CScriptSystem()
 		.addFunction("SetEye", &CCamera::SetEye)
 		.addFunction("SetAt", &CCamera::SetAt)
 		.addFunction("SetUp", &CCamera::SetUp)
+		.addFunction("Move", &CCamera::Move)
+		.addFunction("Rotate", &CCamera::Rotate)
 		.endClass()
 
 		//camera manager
@@ -83,8 +88,7 @@ CScriptSystem::CScriptSystem()
 
 		.deriveClass<CMessageManager, CModule>("MessageManager")
 		.addConstructor<void(*)(void)>()
-		.addCFunction("GetKeyDownQueue", &CMessageManager::GetKeyDownQueue)
-		.addCFunction("GetKeyUpQueue", &CMessageManager::GetKeyUpQueue)
+		.addCFunction("GetInputMsgQueue", &CMessageManager::GetInputMsgQueue)
 		.endClass()
 
 		//render window
@@ -95,7 +99,14 @@ CScriptSystem::CScriptSystem()
 			.addFunction("AddModule", &CRenderWindow::AddModule)
 		.endClass()
 
+		//math class
+		.beginNamespace("MathHelper")
+			.addFunction("Vec3Cross", LuaMath::Vec3Cross)
+			.addFunction("Vec3Add", LuaMath::Vec3Add)
+			.addFunction("Vec3Sub", LuaMath::Vec3Sub)
+		.endNamespace()
 		;
+			
 
 	luaL_dofile(L, "../Assets/Scripts/main.lua");
 }

@@ -48,7 +48,6 @@ VS_OUTPUT VS(float4 inPos : POSITION, float3 inNormal : NORMAL)
     output.Color.xyz = emissive + ambient + diffuse + specular;
     output.Color.w = 1.0;
     
-    //output.Color.xyz = inNormal;
     return output;
 }
 

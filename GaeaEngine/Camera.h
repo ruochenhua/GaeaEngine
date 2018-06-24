@@ -14,7 +14,7 @@ struct SCamPerspective
 {
 	float fov, aspect_ratio, near_clip, far_clip;
 
-	SCamPerspective() : fov(0.4f*3.14f), aspect_ratio(1.0f), near_clip(1.0f), far_clip(100.0f){}
+	SCamPerspective() : fov(0.3f*3.14f), aspect_ratio(1.0), near_clip(1.0f), far_clip(100.0f){}
 };
 
 class CCamera
@@ -34,6 +34,10 @@ public:
 	D3DXVECTOR3 GetAt() { return m_At; }
 	D3DXVECTOR3 GetUp() { return m_Up; }
 
+	//TODO: put these functions into CTransform class
+	//move and rotate camera
+	void Move(float x, float y, float z);
+	void Rotate(float x, float y, float z);
 private:
 	//camera property
 	D3DXVECTOR3 m_Eye;
