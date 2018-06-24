@@ -27,9 +27,10 @@ VS_OUTPUT VS(float4 inPos : POSITION, float3 inNormal : NORMAL)
     N = normalize(N);
 
     float3 P = output.Pos.xyz;
+    
     float3 emissive = float3(0.0, 0.0, 0.0);
     float3 ambient = float3(0.3, 0.3, 0.3);
-    
+
     float3 L = normalize(float3(-1.0, -1.0, 1.0));
     float diffuseLight = max(dot(N, L), 0);
     float3 diffuse = diffuseLight;

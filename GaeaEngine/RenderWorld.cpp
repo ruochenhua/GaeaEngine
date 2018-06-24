@@ -196,8 +196,8 @@ HRESULT CRenderWorld::InitScene()
 	HRESULT hr;
 	ID3D10Blob *vs, *ps;
 
-	D3DX11CompileFromFile("../Assets/Shaders/HLSL/shaders.hlsl", 0, 0, "VS", "vs_4_0", 0, 0, 0, &vs, 0, 0);
-	D3DX11CompileFromFile("../Assets/Shaders/HLSL/shaders.hlsl", 0, 0, "PS", "ps_4_0", 0, 0, 0, &ps, 0, 0);
+	D3DX11CompileFromFile("../Assets/Shaders/HLSL/bank_brdf.hlsl", 0, 0, "VS", "vs_4_0", 0, 0, 0, &vs, 0, 0);
+	D3DX11CompileFromFile("../Assets/Shaders/HLSL/bank_brdf.hlsl", 0, 0, "PS", "ps_4_0", 0, 0, 0, &ps, 0, 0);
 
 	//Create the Shader Objects
 	s_D3Ddevice->CreateVertexShader(vs->GetBufferPointer(), vs->GetBufferSize(), NULL, &m_VS);
