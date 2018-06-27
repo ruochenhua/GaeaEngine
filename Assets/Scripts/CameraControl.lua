@@ -28,6 +28,14 @@ function CameraControl.HandleCameraMsg(input_msg, camera)
             camera:Move(right.x, right.y, right.z)
         elseif KeyBind[key] == "d" then
             camera:Move(-right.x, -right.y, -right.z)
+        elseif KeyBind[key] == "q" then
+            camera:Rotate(0.03, 0)
+        elseif KeyBind[key] == "e" then
+            camera:Rotate(-0.03, 0)
+        elseif KeyBind[key] == "z" then
+            camera:Rotate(0, 0.03)
+        elseif KeyBind[key] == "c" then
+            camera:Rotate(0, -0.03)
         end
 
     elseif KeyBind[type] == "m_motion" or KeyBind[type] == "m_down" or KeyBind[type] == "m_up" then
@@ -46,8 +54,8 @@ function CameraControl.HandleCameraMsg(input_msg, camera)
 
                     local delta_x = input_msg.x - last_x
                     local delta_y = input_msg.y - last_y
-                    
-                    camera:Rotate(0, delta_x*0.02, delta_y*0.02)
+                    --print("xx", delta_x, "yy", delta_y)
+                    camera:Rotate(delta_x*0.02, delta_y*0.02)
 
                     last_x = input_msg.x
                     last_y = input_msg.y

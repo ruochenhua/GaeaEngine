@@ -13,7 +13,9 @@ bool CAssimpImporter::LoadFBXFile(const std::string& file_path,
 		aiProcess_CalcTangentSpace |
 		aiProcess_Triangulate |
 		aiProcess_JoinIdenticalVertices |
-		aiProcess_SortByPType);
+		aiProcess_SortByPType	|
+		aiProcess_OptimizeMeshes	|
+		aiProcess_PreTransformVertices);
 
 	if (!scene)
 	{

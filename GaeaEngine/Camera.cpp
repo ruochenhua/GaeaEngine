@@ -6,10 +6,14 @@ std::map<std::string, CCamera*> g_CameraMap;
 
 CCamera *CCameraManager::s_MainCam = nullptr;
 
-CCamera::CCamera()
-	: m_Eye(0.0,0.0,1.0), m_At(0.0,0.0,0.0), m_Up(0.0, 1.0, 0.0)
-{
+D3DXVECTOR3 g_Forward(1, 0, 0);
+D3DXVECTOR3 g_Up(0, 1, 0);
+D3DXVECTOR3 g_Right(0, 0, 1);
 
+CCamera::CCamera()
+	: m_Eye(0.0,0.0,0.0), m_At(1.0,0.0,0.0), m_Up(0.0, 1.0, 0.0)
+{
+	
 }
 
 void CCamera::GetTransformMatrix(D3DXMATRIX& out_mat)
@@ -51,48 +55,31 @@ void CCamera::Move(float x, float y, float z)
 	D3DXVec3Add(&m_At, &m_At, &move_vec);
 }
 
-void CCamera::Rotate(float x, float y, float z)
-{
-	//TODO better control?
-	/*
-	D3DXVECTOR3 right;
+void CCamera::Rotate(float x, float y)
+{	
 	D3DXVECTOR3 dir;
 	D3DXVec3Subtract(&dir, &m_At, &m_Eye);
+	D3DXVec3Normalize(&dir, &dir);
+
+	D3DXVECTOR3 right;
 	D3DXVec3Cross(&right, &dir, &m_Up);
-	D3DXVec3Normalize(&right, &right);
 
-	float cam_length = D3DXVec3Length(&dir);
+	D3DXMATRIX right_rot;
+	D3DXMatrixRotationAxis(&right_rot, &right, -y);
+	//rot around right axis
+	D3DXVec3TransformCoord(&dir, &dir, &right_rot);
+	D3DXVec3TransformCoord(&m_Up, &m_Up, &right_rot);
 
-	D3DXVECTOR3 up_dist, right_dist;
-	D3DXVec3Scale(&up_dist, &m_Up, z);
-	D3DXVec3Scale(&right_dist, &right, x);
-
-	D3DXVec3Add(&m_At, &m_At, &up_dist);
-	//update upvec
-	D3DXVec3Subtract(&dir, &m_At, &m_Eye);
-	D3DXVec3Cross(&m_Up, &right, &dir);
 	D3DXVec3Normalize(&m_Up, &m_Up);
 
-	D3DXVec3Add(&m_At, &m_At, &right_dist);
-	D3DXVec3Subtract(&dir, &m_At, &m_Eye);
+	D3DXMATRIX up_rot;
+	D3DXMatrixRotationAxis(&up_rot, &m_Up, x);
 
-	D3DXVec3Normalize(&dir, &dir);
-	D3DXVec3Scale(&dir, &dir, cam_length);
+	//rot around up axis
+	D3DXVec3TransformCoord(&dir, &dir, &up_rot);
+
+	//printf("up %f %f %f, %f\n", right.x, right.y, right.z, D3DXVec3LengthSq(&right));
 	D3DXVec3Add(&m_At, &m_Eye, &dir);
-
-
-	*/
-	D3DXMATRIX rot_mat;
-	D3DXMatrixRotationYawPitchRoll(&rot_mat, y, x, z);
-
-	D3DXVECTOR3 look_dir;
-	D3DXVec3Subtract(&look_dir, &m_At, &m_Eye);
-	D3DXVec3TransformCoord(&look_dir, &look_dir, &rot_mat);
-
-	D3DXVec3Add(&m_At, &m_Eye, &look_dir);
-	D3DXVec3TransformCoord(&m_Up, &m_Up, &rot_mat);
-
-	
 	
 }
 

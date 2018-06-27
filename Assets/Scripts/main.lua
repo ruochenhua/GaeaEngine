@@ -17,9 +17,6 @@ render_window:AddModule("EntityManager", entity_mgr)
 render_window:AddModule("MessageManager", msg_mgr)
 
 local cam = Camera()
-cam:SetEye(1.0, 1.0, 1.0)
-cam:SetAt(0,0,0)
-cam:SetUp(0,1,0)
 
 cam_mgr:AddCamera("MainCam", cam)
 

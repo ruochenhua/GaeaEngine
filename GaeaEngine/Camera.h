@@ -37,7 +37,7 @@ public:
 	//TODO: put these functions into CTransform class
 	//move and rotate camera
 	void Move(float x, float y, float z);
-	void Rotate(float x, float y, float z);
+	void Rotate(float x, float y);
 private:
 	//camera property
 	D3DXVECTOR3 m_Eye;
