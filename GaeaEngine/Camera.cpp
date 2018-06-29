@@ -6,9 +6,8 @@ std::map<std::string, CCamera*> g_CameraMap;
 
 CCamera *CCameraManager::s_MainCam = nullptr;
 
-D3DXVECTOR3 g_Forward(1, 0, 0);
-D3DXVECTOR3 g_Up(0, 1, 0);
-D3DXVECTOR3 g_Right(0, 0, 1);
+D3DXVECTOR3 g_YUp(0.0, 1.0, 0.0);
+D3DXVECTOR3 g_YDown(0.0, -1.0, 0.0);
 
 CCamera::CCamera()
 	: m_Eye(0.0,0.0,0.0), m_At(1.0,0.0,0.0), m_Up(0.0, 1.0, 0.0)
@@ -57,7 +56,7 @@ void CCamera::Move(float x, float y, float z)
 
 void CCamera::Rotate(float x, float y)
 {	
-	D3DXVECTOR3 dir;
+	D3DXVECTOR3 dir, new_dir;
 	D3DXVec3Subtract(&dir, &m_At, &m_Eye);
 	D3DXVec3Normalize(&dir, &dir);
 
@@ -67,20 +66,24 @@ void CCamera::Rotate(float x, float y)
 	D3DXMATRIX right_rot;
 	D3DXMatrixRotationAxis(&right_rot, &right, -y);
 	//rot around right axis
-	D3DXVec3TransformCoord(&dir, &dir, &right_rot);
-	D3DXVec3TransformCoord(&m_Up, &m_Up, &right_rot);
+	D3DXVec3TransformCoord(&new_dir, &dir, &right_rot);
+	D3DXVec3Normalize(&new_dir, &new_dir);
 
-	D3DXVec3Normalize(&m_Up, &m_Up);
+	//limit the angle
+	float up_limit = D3DXVec3Dot(&new_dir, &g_YUp);
+	float down_limit = D3DXVec3Dot(&new_dir, &g_YDown);
+
+	if (abs(up_limit) < 0.9 || abs(down_limit) < 0.9)
+	{
+		dir = new_dir;
+	}
 
 	D3DXMATRIX up_rot;
 	D3DXMatrixRotationAxis(&up_rot, &m_Up, x);
 
 	//rot around up axis
 	D3DXVec3TransformCoord(&dir, &dir, &up_rot);
-
-	//printf("up %f %f %f, %f\n", right.x, right.y, right.z, D3DXVec3LengthSq(&right));
 	D3DXVec3Add(&m_At, &m_Eye, &dir);
-	
 }
 
 CCameraManager::CCameraManager()
