@@ -50,7 +50,7 @@ float4 PS(VS_OUTPUT input) : SV_TARGET
 
     //diffuse light
     //light dir, for now set manually
-    float3 L = normalize(float3(1,-1, 1));
+    float3 L = normalize(float3(1, 1, 1));
     float ln = max(dot(L, N), 0);
     float3 diffuse = kd * light_color * ln;
 

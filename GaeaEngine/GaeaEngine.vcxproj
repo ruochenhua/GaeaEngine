@@ -136,6 +136,7 @@
     <ClCompile Include="RenderWorld.cpp" />
     <ClCompile Include="Resource.cpp" />
     <ClCompile Include="Script.cpp" />
+    <ClCompile Include="Terrain.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="AssimpImporter.h" />
@@ -148,6 +149,7 @@
     <ClInclude Include="RenderWorld.h" />
     <ClInclude Include="Resource.h" />
     <ClInclude Include="Script.h" />
+    <ClInclude Include="Terrain.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

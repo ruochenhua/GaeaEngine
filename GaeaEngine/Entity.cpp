@@ -17,14 +17,19 @@ CEntity::CEntity(unsigned int id, std::shared_ptr<SMeshData> mesh_data)
 void CEntity::Render()
 {
 	if (CCameraManager::s_MainCam)
-	{
-		
+	{	
 		D3DXMATRIX look_mat, pers_mat;
 		CCameraManager::s_MainCam->GetLookAtMatrix(look_mat);
 		CCameraManager::s_MainCam->GetPerspectiveFovMatrix(pers_mat);
 
 		D3DXMATRIX trans_matrix;
 		D3DXMatrixTransformation(&trans_matrix, 0, 0, &m_Scale, 0, &m_Rotation, &m_Transition);
+
+		UINT stride = sizeof(SVERTEX);
+		UINT offset = 0;
+		CRenderWorld::s_D3DDeviceContext->IASetVertexBuffers(0, 1, &m_MeshData->vb, &stride, &offset);
+
+		CRenderWorld::s_D3DDeviceContext->IASetIndexBuffer(m_MeshData->ib, DXGI_FORMAT_R16_UINT, 0);
 
 		SEntityTransConstBuffer et_buffer;
 		D3DXMatrixTranspose(&et_buffer.world, &trans_matrix);

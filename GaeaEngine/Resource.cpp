@@ -13,7 +13,7 @@ SMeshData::SMeshData(const std::vector<SVERTEX>& vertices, const std::vector<uin
 
 	unsigned int vert_size = sizeof(SVERTEX) * vertices.size();
 	v_bd.Usage = D3D11_USAGE_DEFAULT;                // write access, access by CPU and GPU
-	v_bd.ByteWidth = sizeof(SVERTEX) * vertices.size();             
+	v_bd.ByteWidth = vert_size;
 	v_bd.BindFlags = D3D11_BIND_VERTEX_BUFFER;       // use as a vertex buffer
 	v_bd.CPUAccessFlags = 0;    // allow CPU to write in buffer
 	
@@ -24,10 +24,7 @@ SMeshData::SMeshData(const std::vector<SVERTEX>& vertices, const std::vector<uin
 	//这里就不需要去map和unmap了，因为是IMMUTABLE
 	hr = CRenderWorld::s_D3Ddevice->CreateBuffer(&v_bd, &init_vb_data, &vb);
 
-	UINT stride = sizeof(SVERTEX);
-	UINT offset = 0;
-	CRenderWorld::s_D3DDeviceContext->IASetVertexBuffers(0, 1, &vb, &stride, &offset);
-
+	
 	/*
 	D3D11_MAPPED_SUBRESOURCE ms;
 	CRenderWorld::s_DeviceContext->Map(vb, NULL, D3D11_MAP_WRITE_DISCARD, NULL, &ms);   // map the buffer
@@ -52,8 +49,6 @@ SMeshData::SMeshData(const std::vector<SVERTEX>& vertices, const std::vector<uin
 	init_data.pSysMem = &indices[0];
 
 	hr = CRenderWorld::s_D3Ddevice->CreateBuffer(&i_bd, &init_data, &ib);
-
-	CRenderWorld::s_D3DDeviceContext->IASetIndexBuffer(ib, DXGI_FORMAT_R16_UINT, 0);
 }
 
 CResourcesManager::CResourcesManager()
