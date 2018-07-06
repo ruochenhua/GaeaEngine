@@ -14,7 +14,7 @@ struct SCamPerspective
 {
 	float fov, aspect_ratio, near_clip, far_clip;
 
-	SCamPerspective() : fov(0.3f*3.14f), aspect_ratio(1.0), near_clip(1.0f), far_clip(100.0f){}
+	SCamPerspective() : fov(0.3f*3.14f), aspect_ratio(1.0), near_clip(0.1f), far_clip(300.0f){}
 };
 
 class CCamera

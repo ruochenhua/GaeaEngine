@@ -63,7 +63,7 @@ void CTerrain::InitBuffer()
 		{
 			SVERTEX vertex;
 			vertex.color = D3DXCOLOR(0.5f, 0.5f, 0.0f, 1.0f);
-			vertex.normal = D3DXVECTOR3(0.0f, 1.0f, 0.0f);
+			vertex.normal = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
 
 			//position is the point of the smallest point
 			vertex.position = D3DXVECTOR3(j*m_Scale.x, m_HeightMap[i*m_Width + j], i*m_Scale.y);
@@ -76,15 +76,51 @@ void CTerrain::InitBuffer()
 	{
 		for (int j = 0; j < m_Width - 1; ++j)
 		{
-			m_IndexRaw.push_back(i*m_Width + j);
-			m_IndexRaw.push_back((i + 1)*m_Width + j);
-			m_IndexRaw.push_back(i*m_Width + j+1);
+			unsigned idx_0 = i * m_Width + j;
+			unsigned idx_1 = (i + 1)*m_Width + j;
+			unsigned idx_2 = i * m_Width + j + 1;
+			m_IndexRaw.push_back(idx_0);
+			m_IndexRaw.push_back(idx_1);
+			m_IndexRaw.push_back(idx_2);
 
-			m_IndexRaw.push_back((i + 1)*m_Width + j);
-			m_IndexRaw.push_back((i + 1)*m_Width + j + 1);
-			m_IndexRaw.push_back(i*m_Width + j + 1);
+			//calculate normal
+			D3DXVECTOR3 edge0, edge1, normal;
+			D3DXVec3Subtract(&edge0, &m_VertexRaw[idx_0].position, &m_VertexRaw[idx_1].position);
+			D3DXVec3Subtract(&edge1, &m_VertexRaw[idx_1].position, &m_VertexRaw[idx_2].position);
+			D3DXVec3Cross(&normal, &edge0, &edge1);
+
+			D3DXVec3Add(&m_VertexRaw[idx_0].normal, &m_VertexRaw[idx_0].normal, &normal);
+			D3DXVec3Add(&m_VertexRaw[idx_1].normal, &m_VertexRaw[idx_1].normal, &normal);
+			D3DXVec3Add(&m_VertexRaw[idx_2].normal, &m_VertexRaw[idx_2].normal, &normal);
+
+
+			idx_0 = (i + 1)*m_Width + j;
+			idx_1 = (i + 1)*m_Width + j + 1;
+			idx_2 = i * m_Width + j + 1;
+			m_IndexRaw.push_back(idx_0);
+			m_IndexRaw.push_back(idx_1);
+			m_IndexRaw.push_back(idx_2);
+
+			D3DXVec3Subtract(&edge0, &m_VertexRaw[idx_0].position, &m_VertexRaw[idx_1].position);
+			D3DXVec3Subtract(&edge1, &m_VertexRaw[idx_1].position, &m_VertexRaw[idx_2].position);
+			D3DXVec3Cross(&normal, &edge0, &edge1);
+
+			D3DXVec3Add(&m_VertexRaw[idx_0].normal, &m_VertexRaw[idx_0].normal, &normal);
+			D3DXVec3Add(&m_VertexRaw[idx_1].normal, &m_VertexRaw[idx_1].normal, &normal);
+			D3DXVec3Add(&m_VertexRaw[idx_2].normal, &m_VertexRaw[idx_2].normal, &normal);
 		}
 	}
+
+	//normalize normal
+	for (int i = 0; i < m_Height; ++i)
+	{
+		for (int j = 0; j < m_Width; ++j)
+		{
+			int idx = i * m_Width + j;
+			D3DXVec3Normalize(&m_VertexRaw[idx].normal, &m_VertexRaw[idx].normal);
+		}
+	}
+
 
 	//create buffer
 	HRESULT hr;
@@ -127,7 +163,7 @@ void CTerrain::InitBuffer()
 
 CTerrainManager::CTerrainManager()
 {
-	m_Terrain.reset(new CTerrain(100, 50));
+	m_Terrain.reset(new CTerrain(100, 100));
 }
 
 void CTerrainManager::Update()

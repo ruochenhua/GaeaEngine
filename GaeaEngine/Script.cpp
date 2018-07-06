@@ -1,6 +1,7 @@
 #include <lua.hpp>
 #include <LuaBridge/LuaBridge.h>
 #include <assert.h>
+#include <time.h>
 
 #include "Script.h"
 #include "Entity.h"
@@ -12,6 +13,11 @@
 #include "Resource.h"
 #include "LuaMath.h"
 
+clock_t GetTime()
+{
+	return clock();
+}
+
 CScriptSystem::CScriptSystem()
 {
 	L = luaL_newstate();
@@ -21,6 +27,7 @@ CScriptSystem::CScriptSystem()
 	luaL_openlibs(L);
 
 	luabridge::getGlobalNamespace(L)
+		.addFunction("GetTime", GetTime)
 		//vec&quat
 		.beginClass<D3DXVECTOR3>("D3DXVECTOR3")
 		.addConstructor<void(*)(void)>()
