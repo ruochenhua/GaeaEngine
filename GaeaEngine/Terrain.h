@@ -7,11 +7,13 @@
 #include "AssimpImporter.h"
 
 struct ID3D11Buffer;
+struct lua_State;
 
 class CTerrain
 {
 public:
-	CTerrain(unsigned height, unsigned width);
+	CTerrain(unsigned height, unsigned width, const D3DXVECTOR2& scale, const std::vector<float>& heightmap);
+	~CTerrain();
 	void Render();
 
 private:
@@ -38,6 +40,7 @@ public:
 
 	//mainly for rendering
 	void Update() override;
+	int CreateTerrain(lua_State* L);
 private:
 	//for now, only have one chunk
 	std::unique_ptr<CTerrain> m_Terrain;

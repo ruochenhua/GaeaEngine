@@ -272,10 +272,4 @@ void CRenderWorld::Update(double time_step)
 void CRenderWorld::AddModule(const std::string& module_name, CModule* module_ptr)
 {
 	m_ModuleMap.emplace(module_name, module_ptr);
-
-	if (module_name == "MessageManager")
-	{
-		CTerrainManager *terrain_mgr = new CTerrainManager;
-		m_ModuleMap.emplace("TerrainManager", terrain_mgr);
-	}
 }

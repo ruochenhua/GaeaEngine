@@ -1,23 +1,28 @@
 #include <d3d11.h>
 
+#include "lua.hpp"
 #include "Terrain.h"
 #include "RenderWorld.h"
 #include "Camera.h"
 #include "Entity.h"
 
-CTerrain::CTerrain(unsigned height, unsigned width)
+CTerrain::CTerrain(unsigned height, unsigned width, const D3DXVECTOR2& scale, const std::vector<float>& heightmap)
 	: m_Height(height), m_Width(width)
-	, m_Pos(0.0f,0.0f,0.0f), m_Scale(1.0f, 1.0f)
+	, m_Pos(0.0f,0.0f,0.0f), m_Scale(scale)
 {
-	m_HeightMap.resize(m_Height * m_Width);
+	m_HeightMap = heightmap;
 	
-	//generate random object
-	for (int i = 0; i < m_Height*m_Width; ++i)
-	{
-		m_HeightMap[i] = rand() % 10;
-	}
-
 	InitBuffer();
+}
+
+CTerrain::~CTerrain()
+{
+	m_Vb->Release();
+	m_Vb = nullptr;
+
+
+	m_Ib->Release();
+	m_Ib = nullptr;
 }
 
 void CTerrain::Render()
@@ -163,7 +168,7 @@ void CTerrain::InitBuffer()
 
 CTerrainManager::CTerrainManager()
 {
-	m_Terrain.reset(new CTerrain(100, 100));
+
 }
 
 void CTerrainManager::Update()
@@ -172,4 +177,33 @@ void CTerrainManager::Update()
 	{
 		m_Terrain->Render();
 	}
+}
+
+int CTerrainManager::CreateTerrain(lua_State* L)
+{
+	unsigned height = lua_tonumber(L, 3);
+	float scale_h = lua_tonumber(L, 5);
+	unsigned width = lua_tonumber(L, 4);
+	float scale_w = lua_tonumber(L, 6);
+	lua_pop(L, 4);
+
+	unsigned map_size = height * width;
+
+	std::vector<float> height_map(map_size);
+	for (unsigned int i = 0; i < map_size; ++i)
+	{
+		lua_pushnumber(L, i + 1);
+		lua_gettable(L, -2);
+		float hm = lua_tonumber(L, -1);
+		height_map[i] = hm;
+		lua_pop(L, 1);
+	}
+	//pop heightmap table
+	lua_pop(L, 1);
+
+	printf("get width & height %d, %d\n", width, height);
+
+	m_Terrain.reset(new CTerrain(height, width, D3DXVECTOR2(scale_h, scale_w), height_map));
+
+	return 0;
 }

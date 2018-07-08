@@ -12,6 +12,7 @@
 #include "Message.h"
 #include "Resource.h"
 #include "LuaMath.h"
+#include "Terrain.h"
 
 clock_t GetTime()
 {
@@ -96,6 +97,13 @@ CScriptSystem::CScriptSystem()
 		.deriveClass<CMessageManager, CModule>("MessageManager")
 		.addConstructor<void(*)(void)>()
 		.addCFunction("GetInputMsgQueue", &CMessageManager::GetInputMsgQueue)
+		.endClass()
+
+		//terrain manager
+		.deriveClass<CTerrainManager, CModule>("TerrainManager")
+		.addConstructor<void(*)(void)>()
+		.addFunction("Update", &CTerrainManager::Update)
+		.addCFunction("CreateTerrain", &CTerrainManager::CreateTerrain)
 		.endClass()
 
 		//render window
