@@ -12,12 +12,19 @@ local terrain_mgr = TerrainManager()
 
 
 local height_map = {}
-local map_height = 10
-local map_width = 10
+local map_height = 50
+local map_width = 50
 local scale_height = 10
-local scale_width = 1
-for i = 1, map_height*map_width do
-    table.insert(height_map, math.random())
+local scale_width = 10
+
+local PerlinNoise = require("PerlinNoise")
+
+print("perlin noise", PerlinNoise.Noise2D(1, 1))
+
+for i = 1, map_height do
+    for j = 1, map_width do
+        table.insert(height_map, PerlinNoise.Noise2D(i, j))
+    end
 end
 
 terrain_mgr:CreateTerrain(height_map, map_height, map_width, scale_height, scale_width)
