@@ -25,6 +25,9 @@
     <Filter Include="Source Files\Terrain">
       <UniqueIdentifier>{b69b25b0-a4fa-44f0-bbe2-34cc76aff98b}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\Resource">
+      <UniqueIdentifier>{acf03f53-e242-48bf-820f-ebbdb232ed9b}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -42,20 +45,23 @@
     <ClCompile Include="Entity.cpp">
       <Filter>Source Files\Entity</Filter>
     </ClCompile>
-    <ClCompile Include="Resource.cpp">
-      <Filter>Source Files\Entity</Filter>
-    </ClCompile>
     <ClCompile Include="Script.cpp">
       <Filter>Source Files\Script</Filter>
     </ClCompile>
     <ClCompile Include="Message.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="AssimpImporter.cpp">
-      <Filter>Source Files\Entity</Filter>
-    </ClCompile>
     <ClCompile Include="Terrain.cpp">
       <Filter>Source Files\Terrain</Filter>
+    </ClCompile>
+    <ClCompile Include="Resource.cpp">
+      <Filter>Source Files\Resource</Filter>
+    </ClCompile>
+    <ClCompile Include="AssimpImporter.cpp">
+      <Filter>Source Files\Resource</Filter>
+    </ClCompile>
+    <ClCompile Include="Mesh.cpp">
+      <Filter>Source Files\Resource</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -71,9 +77,6 @@
     <ClInclude Include="Entity.h">
       <Filter>Source Files\Entity</Filter>
     </ClInclude>
-    <ClInclude Include="Resource.h">
-      <Filter>Source Files\Entity</Filter>
-    </ClInclude>
     <ClInclude Include="Script.h">
       <Filter>Source Files\Script</Filter>
     </ClInclude>
@@ -83,14 +86,20 @@
     <ClInclude Include="Message.h">
       <Filter>Source Files</Filter>
     </ClInclude>
-    <ClInclude Include="AssimpImporter.h">
-      <Filter>Source Files\Entity</Filter>
-    </ClInclude>
     <ClInclude Include="LuaMath.h">
       <Filter>Source Files</Filter>
     </ClInclude>
     <ClInclude Include="Terrain.h">
       <Filter>Source Files\Terrain</Filter>
+    </ClInclude>
+    <ClInclude Include="Resource.h">
+      <Filter>Source Files\Resource</Filter>
+    </ClInclude>
+    <ClInclude Include="AssimpImporter.h">
+      <Filter>Source Files\Resource</Filter>
+    </ClInclude>
+    <ClInclude Include="Mesh.h">
+      <Filter>Source Files\Resource</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

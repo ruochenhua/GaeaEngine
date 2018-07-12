@@ -24,6 +24,23 @@ struct SPRIMITIVE {
 	//Obb m_obb;
 };
 
+struct SMaterial
+{
+	std::string material_path;
+	
+	//diffuse, specular, ambient
+	//normal map, light map, etc
+};
+
+struct SChunk {
+
+	std::vector<SPRIMITIVE> primitives;
+
+	//vb ib
+	//raw data of vertex, and indices
+	std::vector<SVERTEX> vertex_raw;
+	std::vector<uint16_t> index_raw;
+};
 
 class CAssimpImporter
 {

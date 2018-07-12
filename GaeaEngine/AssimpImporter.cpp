@@ -43,7 +43,6 @@ bool CAssimpImporter::LoadFBXFile(const std::string& file_path,
 			int face_size = a_mesh->mNumFaces;
 
 			SPRIMITIVE prim;
-			//auto& prim = m_PrimitiveArray[primitive_count];
 
 			prim.name = std::string(a_mesh->mName.C_Str());
 			prim.m_startIndex = start_triangle * 3;
