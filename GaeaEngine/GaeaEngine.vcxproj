@@ -131,26 +131,31 @@
     <ClCompile Include="Camera.cpp" />
     <ClCompile Include="Entity.cpp" />
     <ClCompile Include="main.cpp" />
-    <ClCompile Include="Mesh.cpp" />
+    <ClCompile Include="MaterialComponent.cpp" />
+    <ClCompile Include="MeshComponent.cpp" />
     <ClCompile Include="Message.cpp" />
     <ClCompile Include="RenderWindow.cpp" />
     <ClCompile Include="RenderWorld.cpp" />
     <ClCompile Include="Resource.cpp" />
     <ClCompile Include="Script.cpp" />
+    <ClCompile Include="ShaderComponent.cpp" />
     <ClCompile Include="Terrain.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="AssimpImporter.h" />
     <ClInclude Include="Camera.h" />
+    <ClInclude Include="Component.h" />
     <ClInclude Include="Entity.h" />
     <ClInclude Include="LuaMath.h" />
-    <ClInclude Include="Mesh.h" />
+    <ClInclude Include="MaterialComponent.h" />
+    <ClInclude Include="MeshComponent.h" />
     <ClInclude Include="Message.h" />
     <ClInclude Include="Module.h" />
     <ClInclude Include="RenderWindow.h" />
     <ClInclude Include="RenderWorld.h" />
     <ClInclude Include="Resource.h" />
     <ClInclude Include="Script.h" />
+    <ClInclude Include="ShaderComponent.h" />
     <ClInclude Include="Terrain.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

@@ -28,6 +28,12 @@
     <Filter Include="Source Files\Resource">
       <UniqueIdentifier>{acf03f53-e242-48bf-820f-ebbdb232ed9b}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\Component">
+      <UniqueIdentifier>{506424ca-23ec-4045-b037-1c377c9f8af1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Component\Resources">
+      <UniqueIdentifier>{e2f008a2-9e77-43d2-a764-84ae04dbd22e}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -60,8 +66,14 @@
     <ClCompile Include="AssimpImporter.cpp">
       <Filter>Source Files\Resource</Filter>
     </ClCompile>
-    <ClCompile Include="Mesh.cpp">
-      <Filter>Source Files\Resource</Filter>
+    <ClCompile Include="MaterialComponent.cpp">
+      <Filter>Source Files\Component\Resources</Filter>
+    </ClCompile>
+    <ClCompile Include="MeshComponent.cpp">
+      <Filter>Source Files\Component\Resources</Filter>
+    </ClCompile>
+    <ClCompile Include="ShaderComponent.cpp">
+      <Filter>Source Files\Component\Resources</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -98,8 +110,17 @@
     <ClInclude Include="AssimpImporter.h">
       <Filter>Source Files\Resource</Filter>
     </ClInclude>
-    <ClInclude Include="Mesh.h">
-      <Filter>Source Files\Resource</Filter>
+    <ClInclude Include="MaterialComponent.h">
+      <Filter>Source Files\Component\Resources</Filter>
+    </ClInclude>
+    <ClInclude Include="MeshComponent.h">
+      <Filter>Source Files\Component\Resources</Filter>
+    </ClInclude>
+    <ClInclude Include="ShaderComponent.h">
+      <Filter>Source Files\Component\Resources</Filter>
+    </ClInclude>
+    <ClInclude Include="Component.h">
+      <Filter>Source Files\Component</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

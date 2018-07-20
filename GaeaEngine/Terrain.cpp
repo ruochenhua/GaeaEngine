@@ -67,9 +67,9 @@ void CTerrain::InitBuffer()
 		for (int j = 0; j < m_Width; ++j)
 		{
 			SVERTEX vertex;
-			vertex.color = D3DXCOLOR(0.5f, 0.5f, 0.0f, 1.0f);
+//			vertex.color = D3DXCOLOR(0.5f, 0.5f, 0.0f, 1.0f);
 			vertex.normal = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
-
+			vertex.texcoord0 = D3DXVECTOR2(0.0f, 0.0f);
 			//position is the point of the smallest point
 			vertex.position = D3DXVECTOR3(j*m_Scale.x, m_HeightMap[i*m_Width + j], i*m_Scale.y);
 

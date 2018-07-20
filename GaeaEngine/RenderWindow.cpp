@@ -20,7 +20,7 @@ CRenderWindow::CRenderWindow()
 	*SDL_WINDOW_SHOWN--显示窗口
 	*SDL_WINDOW_BORDERLESS--显示无边框窗口
 	*/
-	m_Window = SDL_CreateWindow("title", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, 640, 480, SDL_WINDOW_SHOWN | SDL_WINDOW_BORDERLESS);
+	m_Window = SDL_CreateWindow("title", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, 960, 720, SDL_WINDOW_SHOWN | SDL_WINDOW_BORDERLESS);
 	if (!m_Window)
 	{
 		std::cout << SDL_GetError() << std::endl;

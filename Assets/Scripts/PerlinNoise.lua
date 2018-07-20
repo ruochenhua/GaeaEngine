@@ -8,7 +8,7 @@ local function Noise(x, y)
     local n = x + y * 5
     math.randomseed(n)
 
-    return math.random(-100, 100)
+    return math.random(-10, 10)
 end
 
 --光滑噪声

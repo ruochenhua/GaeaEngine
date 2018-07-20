@@ -3,7 +3,7 @@
 #include <memory>
 #include <d3dx9math.h>
 #include <tuple>
-
+#include "Component.h"
 #include "Module.h"
 struct SMeshData;
 struct SEntityTransConstBuffer

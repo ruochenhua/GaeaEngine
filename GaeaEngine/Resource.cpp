@@ -24,14 +24,6 @@ SMeshData::SMeshData(const std::vector<SVERTEX>& vertices, const std::vector<uin
 	//这里就不需要去map和unmap了，因为是IMMUTABLE
 	hr = CRenderWorld::s_D3Ddevice->CreateBuffer(&v_bd, &init_vb_data, &vb);
 
-	
-	/*
-	D3D11_MAPPED_SUBRESOURCE ms;
-	CRenderWorld::s_DeviceContext->Map(vb, NULL, D3D11_MAP_WRITE_DISCARD, NULL, &ms);   // map the buffer
-	memcpy(ms.pData, &vertices[0], vert_size);                // copy the data
-	CRenderWorld::s_DeviceContext->Unmap(vb, NULL);
-	*/
-
 	//index buffer
 	D3D11_BUFFER_DESC i_bd;
 	ZeroMemory(&i_bd, sizeof(i_bd));
@@ -49,6 +41,22 @@ SMeshData::SMeshData(const std::vector<SVERTEX>& vertices, const std::vector<uin
 	init_data.pSysMem = &indices[0];
 
 	hr = CRenderWorld::s_D3Ddevice->CreateBuffer(&i_bd, &init_data, &ib);
+
+	//测试加载贴图
+	hr = D3DX11CreateShaderResourceViewFromFile(CRenderWorld::s_D3Ddevice, "../Assets/Models/sniper/textures/KSR29sniperrifle_Base_Color.jpg", NULL, NULL, &texture_view, NULL);
+
+
+	D3D11_SAMPLER_DESC sampDesc;
+	ZeroMemory(&sampDesc, sizeof(sampDesc));
+	sampDesc.Filter = D3D11_FILTER_MIN_MAG_MIP_LINEAR;
+	sampDesc.AddressU = D3D11_TEXTURE_ADDRESS_WRAP;
+	sampDesc.AddressV = D3D11_TEXTURE_ADDRESS_WRAP;
+	sampDesc.AddressW = D3D11_TEXTURE_ADDRESS_WRAP;
+	sampDesc.ComparisonFunc = D3D11_COMPARISON_NEVER;
+	sampDesc.MinLOD = 0;
+	sampDesc.MaxLOD = D3D11_FLOAT32_MAX;
+
+	CRenderWorld::s_D3Ddevice->CreateSamplerState(&sampDesc, &sampler_state);
 }
 
 CResourcesManager::CResourcesManager()
@@ -64,7 +72,7 @@ bool CResourcesManager::LoadModel(const std::string& model_name, const std::stri
 	m_AssimpImporter.LoadFBXFile(file_path, model_prim, model_vert, model_idx);
 
 	SMeshData* model_mesh = new SMeshData(model_vert, model_idx);
-	m_MeshMap.emplace("Sting", model_mesh);
+	m_MeshMap.emplace(model_name, model_mesh);
 	return true;
 }
 

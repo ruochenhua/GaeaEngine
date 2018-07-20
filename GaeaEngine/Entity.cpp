@@ -39,8 +39,12 @@ void CEntity::Render()
 		CRenderWorld::s_D3DDeviceContext->UpdateSubresource(CRenderWorld::s_EntityTransformBuffer, 0, nullptr, &et_buffer, 0, 0);
 		CRenderWorld::s_D3DDeviceContext->VSSetConstantBuffers(0, 1, &CRenderWorld::s_EntityTransformBuffer);
 		
+		//texture
+		CRenderWorld::s_D3DDeviceContext->PSSetShaderResources(0, 1, &m_MeshData->texture_view);
+		CRenderWorld::s_D3DDeviceContext->PSSetSamplers(0, 1, &m_MeshData->sampler_state);
+
+
 		// draw the vertex buffer to the back buffer
-		
 		CRenderWorld::s_D3DDeviceContext->DrawIndexed(m_MeshData->idx_data.size() , 0, 0);
 	}
 }

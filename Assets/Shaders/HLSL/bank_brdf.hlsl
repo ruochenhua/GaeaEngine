@@ -10,23 +10,36 @@ cbuffer camPerObject
     float3 cam_pos;
 };
 
+struct VS_INPUT
+{
+    float4 Pos : POSITION;   //顶点坐标
+    float3 Norm : NORMAL;    //法向量
+    float2 Tex: TEXCOORD0;   //纹理坐标
+};
+
 struct VS_OUTPUT
 {
     float4 Pos : SV_POSITION;
     float4 WorldPos : TEXCOORD0;
     float4 WorldNormal : TEXCOORD1;
+
+    float2 Tex : TEXCOORD3;
 };
 
-VS_OUTPUT VS(float4 inPos : POSITION, float3 inNormal : NORMAL)
+Texture2D shaderTexture;
+SamplerState SampleType;
+
+VS_OUTPUT VS(VS_INPUT input)
 {
     VS_OUTPUT output;
-    output.Pos = mul(inPos, world);
+    output.Pos = mul(input.Pos, world);
     output.WorldPos = output.Pos;
 
     output.Pos = mul(output.Pos, view);
     output.Pos = mul(output.Pos, project);
     
-    output.WorldNormal = mul(inNormal, world);
+    output.WorldNormal = mul(input.Norm, world);
+    output.Tex = input.Tex;
 
     return output;
 }
@@ -35,12 +48,14 @@ VS_OUTPUT VS(float4 inPos : POSITION, float3 inNormal : NORMAL)
 
 float4 PS(VS_OUTPUT input) : SV_TARGET
 {
+   // return textureColor;
+
     float3 light_color = float3(0.5, 0.3, 0.8);
     //Ka, Kd, Ks was set to (1, 1, 1) for now
     float ka = 1.0;
     float kd = 1.0;
     float ks = 1.0;
-    float shininess = 2.0f;
+    float shininess = 0.5f;
 
     float3 P = input.Pos.xyz;
     float3 N = normalize(input.WorldNormal);
@@ -73,7 +88,11 @@ float4 PS(VS_OUTPUT input) : SV_TARGET
     }
 
     float4 color = float4(0, 0, 0, 1);
-    color.xyz = ambient + diffuse + specular;
-    return color;
-    
+   // color.xyz = ambient + diffuse + specular;
+   // return objTexture.Sample(ObjSamplerState, input.Tex);
+   float2 tex_coord = input.Tex;
+   tex_coord.y = 1.0 - tex_coord.y;
+   color = shaderTexture.Sample(SampleType, tex_coord);
+   color.xyz += ambient + specular;
+   return color; 
 }

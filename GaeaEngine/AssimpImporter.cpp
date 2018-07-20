@@ -75,16 +75,15 @@ bool CAssimpImporter::LoadFBXFile(const std::string& file_path,
 				{
 					vertex.texcoord0.x = a_mesh->mTextureCoords[0][j].x;
 					vertex.texcoord0.y = a_mesh->mTextureCoords[0][j].y;
-					vertex.texcoord0.z = a_mesh->mTextureCoords[0][j].z;
+					//printf("tex coord:%d, %f, %f\n", j,vertex.texcoord0.x, vertex.texcoord0.y);
 				}
 				else
 				{
 					vertex.texcoord0.x = 0;
 					vertex.texcoord0.y = 0;
-					vertex.texcoord0.z = 0;
 				}
 
-				vertex.color = D3DXCOLOR(0, 1, 0, 1);
+			//	vertex.color = D3DXCOLOR(0, 1, 0, 1);
 			}
 
 			for (int j = 0; j < face_size; ++j)

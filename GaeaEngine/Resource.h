@@ -23,6 +23,11 @@ struct SMeshData
 	//buffer
 	ID3D11Buffer *vb;
 	ID3D11Buffer *ib;
+
+	ID3D11Resource* texture;
+	ID3D11ShaderResourceView *texture_view;
+
+	ID3D11SamplerState *sampler_state;
 };
 
 class CResourcesManager : public CModule

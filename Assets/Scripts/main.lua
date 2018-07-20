@@ -31,7 +31,8 @@ terrain_mgr:CreateTerrain(height_map, map_height, map_width, scale_height, scale
 
 local do_update = true
 
-local load_result = res_mgr:LoadModel("Sting", "../Assets/Models/Sting.fbx")
+--local load_result = res_mgr:LoadModel("Sting", "../Assets/Models/Sting.fbx")
+local result = res_mgr:LoadModel("sniper", "../Assets/Models/sniper/sniper_BIN.fbx")
 
 render_window:AddModule("CameraManager", cam_mgr)
 render_window:AddModule("EntityManager", entity_mgr)
@@ -42,7 +43,9 @@ local cam = Camera()
 
 cam_mgr:AddCamera("MainCam", cam)
 
-local entity_id = entity_mgr:AddEntity("Sting")
+local entity_id = entity_mgr:AddEntity("sniper")
+local entity = entity_mgr:GetEntity(entity_id)
+entity:SetScale(0.01,0.01,0.01)
 
 local function HandleMsg(msg_table)
     for _, v in ipairs(msg_table) do

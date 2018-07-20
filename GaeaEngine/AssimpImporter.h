@@ -7,9 +7,9 @@ struct SVERTEX
 {
 	D3DXVECTOR3 position;
 	D3DXVECTOR3 normal;
-	D3DXVECTOR3 texcoord0;
+	D3DXVECTOR2 texcoord0;
 
-	D3DXCOLOR color;
+//	D3DXCOLOR color;
 };
 
 struct SPRIMITIVE {
