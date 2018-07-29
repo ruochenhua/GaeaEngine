@@ -1,14 +1,18 @@
 #pragma once
+#include <LuaBridge/LuaBridge.h>
 //lua script binding
-struct lua_State;
 
 class CScriptSystem
 {
 public:
 	CScriptSystem();
 	~CScriptSystem();
+
+	void Init();
 private:
-	lua_State *L;
+	static lua_State * L;
 };
+
+CScriptSystem* GetScriptSystem();
 
 

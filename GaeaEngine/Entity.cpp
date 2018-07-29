@@ -1,19 +1,52 @@
-#include <assert.h>
+#include "stdafx.h"
+
 #include "Entity.h"
 #include "Resource.h"
 #include "RenderWorld.h"
-#include "Camera.h"
 #include "Script.h"
 
-CEntity::CEntity(unsigned int id, std::shared_ptr<SMeshData> mesh_data)
-	: m_ID(id), m_MeshData(mesh_data)
-	, m_Scale(1.0f, 1.0f, 1.0f)
-	, m_Rotation(0.0f, 0.0f, 0.0f, 1.0f)
-	, m_Transition(1.0f, 0.0f, 1.0f)
+CEntity::CEntity(uint32_t id)
+	: m_ID(id)
+{
+	//必须通过entitymanager制造以及销毁, 不开放luabridge接口
+}
+
+CEntity::~CEntity()
 {
 
 }
 
+bool CEntity::AddComponent(const std::string& com_name, std::shared_ptr<CComponent> com_ptr)
+{
+	auto iter = m_Components.find(com_name);
+	if (iter != m_Components.end())
+	{
+		//不支持重复的组件
+		return false;
+	}
+	else
+	{
+		//新增组件
+		m_Components.emplace(com_name, com_ptr);
+		return true;
+	}
+}
+
+void CEntity::RemoveComponent(const std::string& com_name)
+{
+	m_Components.erase(com_name);
+}
+
+void CEntity::InitLuaAPI(lua_State* L)
+{
+	luabridge::getGlobalNamespace(L)
+		.beginClass<CEntity>("Entity")
+		.addFunction("AddComponent", &CEntity::AddComponent)
+		.addFunction("RemoveComponent", &CEntity::RemoveComponent)
+		.endClass();
+
+}
+/*
 void CEntity::Render()
 {
 	if (CCameraManager::s_MainCam)
@@ -48,58 +81,22 @@ void CEntity::Render()
 		CRenderWorld::s_D3DDeviceContext->DrawIndexed(m_MeshData->idx_data.size() , 0, 0);
 	}
 }
+*/
 
-void CEntity::SetScale(float x, float y, float z)
-{
-	m_Scale = D3DXVECTOR3(x,y,z);
-}
-
-void CEntity::SetRotation(float x, float y, float z, float w)
-{
-	m_Rotation = D3DXQUATERNION(x,y,z,w);
-}
-
-void CEntity::SetTranslation(float x, float y, float z)
-{
-	m_Transition = D3DXVECTOR3(x,y,z);
-}
-
-const int MAX_ENTITY_NUM = 100;
 CEntityManager::CEntityManager()
+	: m_MaxEntityNum(100)
 {
-	m_Entities.resize(100);
+	m_Entities.resize(m_MaxEntityNum);
 }
 
-void CEntityManager::Render()
+unsigned int CEntityManager::AddEntity()
 {
-	for(auto &e : m_Entities)
-	{
-		if (e)
-		{
-			e->Render();
-		}
-	}
-}
 
-void CEntityManager::Update()
-{
-	Render();
-}
-
-unsigned int CEntityManager::AddEntity(const std::string& mesh_name)
-{
 	for (int i = 0; i < 100; ++i)
 	{
 		if (!m_Entities[i])
 		{
-			auto mesh_data = CResourcesManager::GetMeshData(mesh_name);
-			if (!mesh_data)
-			{
-				printf("mesh does not exist %s\n", mesh_name.data());
-				return -1;
-			}
-
-			m_Entities[i].reset(new CEntity(i, mesh_data));
+			m_Entities[i].reset(new CEntity(i));
 			return i;
 		}
 	}
@@ -108,7 +105,7 @@ unsigned int CEntityManager::AddEntity(const std::string& mesh_name)
 
 bool CEntityManager::RemoveEntity(unsigned int id)
 {
-	if(id >= 0 && id < MAX_ENTITY_NUM)
+	if(id >= 0 && id < m_MaxEntityNum)
 		m_Entities[id].reset();
 
 	return true;
@@ -116,7 +113,7 @@ bool CEntityManager::RemoveEntity(unsigned int id)
 
 CEntity* CEntityManager::GetEntity(unsigned int id)
 {
-	if (id >= 0 && id < MAX_ENTITY_NUM)
+	if (id >= 0 && id < m_MaxEntityNum)
 	{
 		return m_Entities[id].get();
 	}
@@ -124,3 +121,14 @@ CEntity* CEntityManager::GetEntity(unsigned int id)
 	return nullptr;
 }
 
+void CEntityManager::InitLuaAPI(lua_State* L)
+{
+	luabridge::getGlobalNamespace(L)
+		.beginClass<CEntityManager>("EntityManager")
+		.addConstructor<void(*)(void)>()
+		.addFunction("AddEntity", &CEntityManager::AddEntity)
+		.addFunction("RemoveEntity", &CEntityManager::RemoveEntity)
+		.addFunction("GetEntity", &CEntityManager::GetEntity)
+		.addFunction("GetMaxEntityNum", &CEntityManager::GetMaxEntityNum)
+		.endClass();
+}

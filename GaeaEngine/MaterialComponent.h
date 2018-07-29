@@ -1,7 +1,19 @@
 #pragma once
 #include "Component.h"
 
-class CMaterialComponent : public CComponent
+struct SMaterialData
 {
 
+};
+
+class CMaterialComponent : public CComponent
+{
+public:
+	CMaterialComponent(const std::string& file_path);
+
+public:
+	static void InitLuaAPI(lua_State *L);
+
+private:
+	std::shared_ptr<SMaterialData> m_MaterialData;
 };

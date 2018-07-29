@@ -1,4 +1,4 @@
-#include <d3d11.h>
+#include "stdafx.h"
 
 #include "lua.hpp"
 #include "Terrain.h"

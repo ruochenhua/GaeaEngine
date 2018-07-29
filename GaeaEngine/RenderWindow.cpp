@@ -1,8 +1,7 @@
-
-#include <iostream>
-
+#include "stdafx.h"
 #include "RenderWindow.h"
 #include "RenderWorld.h"
+#include "Script.h"
 
 CRenderWindow::CRenderWindow()
 {
@@ -81,4 +80,14 @@ void CRenderWindow::AddModule(const std::string& module_name, CModule* module_pt
 	{
 		m_RenderWorld->AddModule(module_name, module_ptr);
 	}
+}
+
+void CRenderWindow::InitLuaAPI(lua_State *L)
+{
+	luabridge::getGlobalNamespace(L)
+		.beginClass<CRenderWindow>("RenderWindow")
+		.addConstructor<void(*)(void)>()
+		.addFunction("Update", &CRenderWindow::Update)
+		.addFunction("AddModule", &CRenderWindow::AddModule)
+		.endClass();
 }

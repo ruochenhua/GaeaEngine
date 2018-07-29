@@ -83,6 +83,7 @@
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
       <ConformanceMode>true</ConformanceMode>
+      <PrecompiledHeader>Create</PrecompiledHeader>
     </ClCompile>
     <Link>
       <AdditionalDependencies>SDL2.lib;SDL2main.lib;SDL2test.lib;d3d11.lib;d3dx11.lib;d3dx10.lib;lua53.lib;assimp-vc140-mt.lib;%(AdditionalDependencies)</AdditionalDependencies>
@@ -128,7 +129,8 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="AssimpImporter.cpp" />
-    <ClCompile Include="Camera.cpp" />
+    <ClCompile Include="CameraComponent.cpp" />
+    <ClCompile Include="CameraModule.cpp" />
     <ClCompile Include="Entity.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="MaterialComponent.cpp" />
@@ -139,11 +141,12 @@
     <ClCompile Include="Resource.cpp" />
     <ClCompile Include="Script.cpp" />
     <ClCompile Include="ShaderComponent.cpp" />
-    <ClCompile Include="Terrain.cpp" />
+    <ClCompile Include="TransformComponent.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="AssimpImporter.h" />
-    <ClInclude Include="Camera.h" />
+    <ClInclude Include="CameraModule.h" />
+    <ClInclude Include="CameraComponent.h" />
     <ClInclude Include="Component.h" />
     <ClInclude Include="Entity.h" />
     <ClInclude Include="LuaMath.h" />
@@ -156,7 +159,8 @@
     <ClInclude Include="Resource.h" />
     <ClInclude Include="Script.h" />
     <ClInclude Include="ShaderComponent.h" />
-    <ClInclude Include="Terrain.h" />
+    <ClInclude Include="stdafx.h" />
+    <ClInclude Include="TransformComponent.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

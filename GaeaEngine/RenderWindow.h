@@ -23,6 +23,9 @@ public:
 
 	void AddModule(const std::string& module_name, CModule* module_ptr);
 
+public:
+	static void InitLuaAPI(lua_State *L);
+
 private:
 	SDL_Window * m_Window;
 	SDL_Surface *m_Surface;

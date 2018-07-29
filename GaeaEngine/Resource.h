@@ -9,26 +9,8 @@
 
 #include "Module.h"
 #include "AssimpImporter.h"
+#include "MeshComponent.h"
 
-struct SMeshData
-{
-	//for now all immutable vertex buffer
-	SMeshData(const std::vector<SVERTEX>& vertices, 
-		const std::vector<uint16_t>& indices);
-	//for now, default to vertex and index data
-	//raw data
-	std::vector<SVERTEX> vert_data;
-	std::vector<uint16_t> idx_data;
-
-	//buffer
-	ID3D11Buffer *vb;
-	ID3D11Buffer *ib;
-
-	ID3D11Resource* texture;
-	ID3D11ShaderResourceView *texture_view;
-
-	ID3D11SamplerState *sampler_state;
-};
 
 class CResourcesManager : public CModule
 {

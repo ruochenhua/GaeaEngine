@@ -1,7 +1,7 @@
+#include "stdafx.h"
 #include "Message.h"
-#include <SDL.h>
-#include <SDL_syswm.h>
 #include "lua.hpp"
+#include "Script.h"
 
 CMessageManager::CMessageManager()
 {
@@ -54,4 +54,13 @@ int CMessageManager::GetInputMsgQueue(lua_State* L)
 
 	m_InputMsgQueue.clear();
 	return queue_size;
+}
+
+void CMessageManager::InitLuaAPI(lua_State *L)
+{
+	luabridge::getGlobalNamespace(L)
+		.deriveClass<CMessageManager, CModule>("MessageManager")
+		.addConstructor<void(*)(void)>()
+		.addCFunction("GetInputMsgQueue", &CMessageManager::GetInputMsgQueue)
+		.endClass();
 }

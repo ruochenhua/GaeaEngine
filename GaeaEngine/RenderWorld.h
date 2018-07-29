@@ -21,7 +21,6 @@ public:
 	static ID3D11Buffer *s_CameraTransformBuffer;
 
 	static bool s_FirstDraw;
-
 public:
 	CRenderWorld(HWND g_HWnd);
 	~CRenderWorld();
@@ -29,7 +28,6 @@ public:
 	void Update(double time_step);
 	void AddModule(const std::string& module_name, CModule* module_ptr);
 
-	//void GetEntityManager(CEntityManager *mgr) { mgr = m_EntityMgr.get(); }
 private:
 
 	IDXGISwapChain *m_SwapChain;//½»»»Á´  

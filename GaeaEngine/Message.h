@@ -21,6 +21,9 @@ public:
 
 	int GetInputMsgQueue(lua_State *L);
 
+public:
+	static void InitLuaAPI(lua_State *L);
+
 private:
 	std::vector<SInputMsg> m_InputMsgQueue;
 };

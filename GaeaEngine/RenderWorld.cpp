@@ -1,7 +1,6 @@
+#include "stdafx.h"
 #include "RenderWorld.h"
-#include <iostream>
-#include <assert.h>
-#include "Camera.h"
+#include "CameraModule.h"
 #include "Resource.h"
 #include "Entity.h"
 #include "Terrain.h"
