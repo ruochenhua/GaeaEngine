@@ -2,6 +2,9 @@
 #include "RenderWindow.h"
 #include "RenderWorld.h"
 #include "Script.h"
+#include "Entity.h"
+
+CEntityManager CRenderWindow::s_EntityMgr;
 
 CRenderWindow::CRenderWindow()
 {
@@ -82,6 +85,11 @@ void CRenderWindow::AddModule(const std::string& module_name, CModule* module_pt
 	}
 }
 
+CEntityManager* CRenderWindow::GetEntityManager()
+{
+	return &s_EntityMgr;
+}
+
 void CRenderWindow::InitLuaAPI(lua_State *L)
 {
 	luabridge::getGlobalNamespace(L)
@@ -89,5 +97,6 @@ void CRenderWindow::InitLuaAPI(lua_State *L)
 		.addConstructor<void(*)(void)>()
 		.addFunction("Update", &CRenderWindow::Update)
 		.addFunction("AddModule", &CRenderWindow::AddModule)
+		.addFunction("GetEntityManager", &CRenderWindow::GetEntityManager)
 		.endClass();
 }

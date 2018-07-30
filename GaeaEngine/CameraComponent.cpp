@@ -2,6 +2,13 @@
 #include "CameraComponent.h"
 #include "Script.h"
 
+CCameraComponent::CCameraComponent()
+	: m_Fov(1.0), m_AspectRatio(1.0)
+	, m_Near(0.1), m_Far(300)
+{
+
+}
+
 void CCameraComponent::InitLuaAPI(lua_State *L)
 {
 	luabridge::getGlobalNamespace(L)

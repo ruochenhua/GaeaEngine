@@ -16,7 +16,7 @@ CEntity::~CEntity()
 
 }
 
-bool CEntity::AddComponent(const std::string& com_name, std::shared_ptr<CComponent> com_ptr)
+bool CEntity::AddComponent(const std::string& com_name, CComponent& comp)
 {
 	auto iter = m_Components.find(com_name);
 	if (iter != m_Components.end())
@@ -27,7 +27,7 @@ bool CEntity::AddComponent(const std::string& com_name, std::shared_ptr<CCompone
 	else
 	{
 		//新增组件
-		m_Components.emplace(com_name, com_ptr);
+		m_Components.emplace(com_name, comp);
 		return true;
 	}
 }
@@ -92,7 +92,7 @@ CEntityManager::CEntityManager()
 unsigned int CEntityManager::AddEntity()
 {
 
-	for (int i = 0; i < 100; ++i)
+	for (int i = 0; i < 100; ++i)	
 	{
 		if (!m_Entities[i])
 		{

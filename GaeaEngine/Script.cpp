@@ -27,7 +27,6 @@ int error_handle(lua_State *L)
 {
 	std::string error_msg = lua_tostring(L, -1);
 	
-	printf("stack top %d\n", lua_gettop(L));
 	printf("%s\n", error_msg.data());
 	assert(false);
 
@@ -87,7 +86,10 @@ void CScriptSystem::Init()
 
 	//camera_component
 	//camera_module
-	luaL_dofile(L, "../Assets/Scripts/main.lua");
+	
+	lua_pushcfunction(L, error_handle);
+	luaL_loadfile(L, "../Assets/Scripts/main.lua");
+	lua_pcall(L, 0, 0, -2);
 }
 
 CScriptSystem g_ScriptSys;

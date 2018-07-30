@@ -23,7 +23,9 @@ public:
 
 	void AddModule(const std::string& module_name, CModule* module_ptr);
 
+	CEntityManager* GetEntityManager();
 public:
+	static CEntityManager s_EntityMgr;
 	static void InitLuaAPI(lua_State *L);
 
 private:

@@ -6,9 +6,7 @@
 #include <map>
 #include <memory>
 
-class CCameraManager;
 class CEntityManager;
-class CResourcesManager;
 class CModule;
 
 class CRenderWorld
@@ -48,7 +46,5 @@ private:
 	void PreUpdate();
 	void PostUpdate();
 
-	//managers
-	std::unique_ptr<CCameraManager> m_CameraMgr;
 	std::map<std::string, CModule*> m_ModuleMap;
 };

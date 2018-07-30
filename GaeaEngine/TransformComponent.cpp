@@ -38,7 +38,7 @@ void CTransformComponent::InitLuaAPI(lua_State* L)
 		.endClass()
 
 		//transform
-		.deriveClass<CTransformComponent, CComponent>("CTransformComponent")
+		.deriveClass<CTransformComponent, CComponent>("TransformComponent")
 		.addConstructor<void(*)(void)>()
 		.addFunction("GetScale", &CTransformComponent::GetScale)
 		.addFunction("GetRotation", &CTransformComponent::GetRotation)

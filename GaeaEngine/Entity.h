@@ -19,7 +19,7 @@ class CEntity
 {
 public:	
 	~CEntity();
-	bool AddComponent(const std::string& com_name, std::shared_ptr<CComponent> com_ptr);
+	bool AddComponent(const std::string& com_name, CComponent& comp);
 	void RemoveComponent(const std::string& com_name);
 
 public:
@@ -30,11 +30,10 @@ private:
 	CEntity(uint32_t id);
 
 
-	std::map<std::string, std::shared_ptr<CComponent>> m_Components;
+	std::map<std::string, CComponent> m_Components;
 	uint32_t m_ID;
 };
 
-//todo: 不应该是CModule
 class CEntityManager
 {
 public:

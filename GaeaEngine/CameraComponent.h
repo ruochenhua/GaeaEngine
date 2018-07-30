@@ -5,6 +5,7 @@
 class CCameraComponent : public CComponent
 {
 public:
+	CCameraComponent();
 	void SetFov(float fov) { m_Fov = fov; }
 	void SetAspectRatio(float aspect_ratio) { m_AspectRatio = aspect_ratio; }
 	void SetClippingPlanes(float n, float f) {
