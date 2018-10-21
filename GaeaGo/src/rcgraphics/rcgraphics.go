@@ -3,16 +3,19 @@ package rcgraphics
 import (
 	"fmt"
 	"log"
-	"runtime"
 	"strings"
 
 	"github.com/go-gl/gl/v4.6-core/gl"
 	"github.com/go-gl/glfw/v3.2/glfw"
 )
 
-func init() {
-	runtime.LockOSThread()
-}
+var (
+	triangle = []float32{
+		0, 0.5, 0, // top
+		-0.5, -0.5, 0, // left
+		0.5, -0.5, 0, // right
+	}
+)
 
 const (
 	width  = 500
@@ -36,7 +39,7 @@ const (
 )
 
 //InitGlfw : init glfw
-func InitGlfw() *glfw.Window {
+func initGlfw() *glfw.Window {
 	if err := glfw.Init(); err != nil {
 		panic(err)
 	}
@@ -58,7 +61,7 @@ func InitGlfw() *glfw.Window {
 }
 
 //InitOpenGL : init open gl
-func InitOpenGL() uint32 {
+func initOpenGL() uint32 {
 	if err := gl.Init(); err != nil {
 		panic(err)
 	}
@@ -66,12 +69,12 @@ func InitOpenGL() uint32 {
 	version := gl.GoStr(gl.GetString(gl.VERSION))
 	log.Println("OpenGL version", version)
 
-	vertexShader, err := CompileShader(vertexShaderSource, gl.VERTEX_SHADER)
+	vertexShader, err := compileShader(vertexShaderSource, gl.VERTEX_SHADER)
 	if err != nil {
 		panic(err)
 	}
 
-	fragmentShader, err := CompileShader(fragmentShaderSource, gl.FRAGMENT_SHADER)
+	fragmentShader, err := compileShader(fragmentShaderSource, gl.FRAGMENT_SHADER)
 	if err != nil {
 		panic(err)
 	}
@@ -86,7 +89,7 @@ func InitOpenGL() uint32 {
 }
 
 //CreateVao : create vao
-func CreateVao(points []float32) uint32 {
+func createVao(points []float32) uint32 {
 	var vbo uint32
 	gl.GenBuffers(1, &vbo)
 	gl.BindBuffer(gl.ARRAY_BUFFER, vbo)
@@ -103,7 +106,7 @@ func CreateVao(points []float32) uint32 {
 }
 
 //Draw : draw
-func Draw(vao uint32, window *glfw.Window, program uint32) bool {
+func draw(vao uint32, window *glfw.Window, program uint32) bool {
 	gl.Clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT)
 	gl.UseProgram(program)
 
@@ -116,7 +119,7 @@ func Draw(vao uint32, window *glfw.Window, program uint32) bool {
 }
 
 //CompileShader : compile shader
-func CompileShader(source string, shaderType uint32) (uint32, error) {
+func compileShader(source string, shaderType uint32) (uint32, error) {
 	shader := gl.CreateShader(shaderType)
 
 	csources, free := gl.Strs(source)
@@ -137,4 +140,33 @@ func CompileShader(source string, shaderType uint32) (uint32, error) {
 	}
 
 	return shader, nil
+}
+
+//System : graphics system
+type System struct {
+	window *glfw.Window
+	prog   uint32
+	vao    uint32
+}
+
+//New : create new system
+func (s *System) New() {
+	fmt.Print("create new graphics system")
+}
+
+//Init : Init System
+func (s *System) Init() {
+	s.window = initGlfw()
+	s.prog = initOpenGL()
+	s.vao = createVao(triangle)
+}
+
+//Update : update function
+func (s *System) Update() {
+	draw(s.vao, s.window, s.prog)
+}
+
+//Terminate : terminate function
+func (s *System) Terminate() {
+
 }
