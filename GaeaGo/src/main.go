@@ -1,16 +1,22 @@
 package main
 
 import (
+	"runtime"
+
 	"./rcgraphics"
 	"./rcworld"
 )
 
-func main() {
-	graphics := new(rcgraphics.System)
-	world := rcworld.NewWorld()
-	world.AddSystem(graphics)
+func init() {
+	runtime.LockOSThread()
+}
 
-	for {
-		world.UpdateSystem()
+func main() {
+	world := rcworld.NewWorld()
+
+	graphics := new(rcgraphics.System)
+	world.AddSystem(graphics)
+	for world.UpdateSystem() {
+
 	}
 }

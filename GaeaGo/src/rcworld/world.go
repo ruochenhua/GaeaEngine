@@ -1,23 +1,14 @@
 //Package rcworld : this package create a world
 package rcworld
 
-import "runtime"
-
-type rcSystem interface {
-	New()
-	Init()
-	Update()
-	Terminate()
-}
-
 //RcWorld : world structure
 type RcWorld struct {
 	systemList []rcSystem
 	ready      int
+	entityMgr  EntityMgr
 }
 
 func init() {
-	runtime.LockOSThread()
 }
 
 //AddSystem : add a system to world
@@ -29,10 +20,14 @@ func (w *RcWorld) AddSystem(sys rcSystem) {
 }
 
 //UpdateSystem : update system
-func (w *RcWorld) UpdateSystem() {
+func (w *RcWorld) UpdateSystem() bool {
 	for _, sys := range w.systemList {
-		sys.Update()
+		if !sys.Update(&w.entityMgr) {
+			return false
+		}
 	}
+
+	return true
 }
 
 //NewWorld : create a new world

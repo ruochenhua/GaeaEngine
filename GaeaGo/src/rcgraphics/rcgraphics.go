@@ -5,6 +5,8 @@ import (
 	"log"
 	"strings"
 
+	"../rcworld"
+
 	"github.com/go-gl/gl/v4.6-core/gl"
 	"github.com/go-gl/glfw/v3.2/glfw"
 )
@@ -162,8 +164,14 @@ func (s *System) Init() {
 }
 
 //Update : update function
-func (s *System) Update() {
+func (s *System) Update(eMgr *rcworld.EntityMgr) bool {
 	draw(s.vao, s.window, s.prog)
+	if s.window.ShouldClose() {
+		return false
+	} else {
+		return true
+	}
+
 }
 
 //Terminate : terminate function
