@@ -16,7 +16,9 @@ func main() {
 
 	graphics := new(rcgraphics.System)
 	world.AddSystem(graphics)
-	for world.UpdateSystem() {
 
+	//add emtities here for now
+
+	for world.UpdateSystem() {
 	}
 }
